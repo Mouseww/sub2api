@@ -3,12 +3,14 @@ package service
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"os"
 	"time"
 
 	dbent "github.com/Wei-Shaw/sub2api/ent"
 	"github.com/Wei-Shaw/sub2api/internal/config"
 	"github.com/Wei-Shaw/sub2api/internal/payment"
+	"github.com/Wei-Shaw/sub2api/internal/payment/provider"
 	"github.com/Wei-Shaw/sub2api/internal/pkg/antigravity"
 	"github.com/Wei-Shaw/sub2api/internal/pkg/logger"
 	"github.com/Wei-Shaw/sub2api/internal/pkg/xai"
@@ -946,6 +948,7 @@ var ProviderSet = wire.NewSet(
 	ProvideChannelMonitorV2Aggregator,
 	NewChannelMonitorRequestTemplateService,
 	ProvideUserPlatformQuotaUsageFlusher,
+	ProvideBlockchainMonitorService,
 )
 
 // ProvideUserPlatformQuotaUsageFlusher 创建并启动 UserPlatformQuotaUsageFlusher。
@@ -1037,4 +1040,83 @@ func ProvideChannelMonitorV2Aggregator(repo ChannelMonitorV2Repository, db *sql.
 	}
 	aggregator.Start()
 	return aggregator
+}
+
+// ProvideBlockchainMonitorService creates and starts the blockchain monitoring service.
+// Set BLOCKCHAIN_MONITOR_DISABLED=1 to disable automatic monitoring (manual check only).
+func ProvideBlockchainMonitorService(
+	entClient *dbent.Client,
+	paymentService *PaymentService,
+	cfg *config.Config,
+) *BlockchainMonitorService {
+	// Load TRC20 configuration from environment
+	var trc20Config *provider.BlockchainMonitorConfig
+	if os.Getenv("USDT_TRC20_DEPOSIT_ADDRESS") != "" {
+		pollInterval := 15
+		if val := os.Getenv("USDT_TRC20_POLL_INTERVAL"); val != "" {
+			fmt.Sscanf(val, "%d", &pollInterval)
+		}
+		
+		confirmations := 19
+		if val := os.Getenv("USDT_TRC20_CONFIRMATIONS"); val != "" {
+			fmt.Sscanf(val, "%d", &confirmations)
+		}
+		
+		trc20Config = &provider.BlockchainMonitorConfig{
+			NetworkID:           "TRC20",
+			DepositAddress:      os.Getenv("USDT_TRC20_DEPOSIT_ADDRESS"),
+			ContractAddress:     os.Getenv("USDT_TRC20_CONTRACT"),
+			BlockchainAPIURL:    os.Getenv("USDT_TRC20_API_URL"),
+			BlockchainAPIKey:    os.Getenv("USDT_TRC20_API_KEY"),
+			PollInterval:        time.Duration(pollInterval) * time.Second,
+			RequiredConfirms:    confirmations,
+			MaxConfirmationTime: 30 * time.Minute,
+		}
+	}
+	
+	// Load ERC20 configuration from environment
+	var erc20Config *provider.BlockchainMonitorConfig
+	if os.Getenv("USDT_ERC20_DEPOSIT_ADDRESS") != "" {
+		pollInterval := 30
+		if val := os.Getenv("USDT_ERC20_POLL_INTERVAL"); val != "" {
+			fmt.Sscanf(val, "%d", &pollInterval)
+		}
+		
+		confirmations := 12
+		if val := os.Getenv("USDT_ERC20_CONFIRMATIONS"); val != "" {
+			fmt.Sscanf(val, "%d", &confirmations)
+		}
+		
+		erc20Config = &provider.BlockchainMonitorConfig{
+			NetworkID:           "ERC20",
+			DepositAddress:      os.Getenv("USDT_ERC20_DEPOSIT_ADDRESS"),
+			ContractAddress:     os.Getenv("USDT_ERC20_CONTRACT"),
+			BlockchainAPIURL:    os.Getenv("USDT_ERC20_API_URL"),
+			BlockchainAPIKey:    os.Getenv("USDT_ERC20_API_KEY"),
+			PollInterval:        time.Duration(pollInterval) * time.Second,
+			RequiredConfirms:    confirmations,
+			MaxConfirmationTime: 60 * time.Minute,
+		}
+	}
+	
+	// Get logger from zap
+	zapLogger := logger.L()
+	
+	// Create service
+	svc := NewBlockchainMonitorService(entClient, paymentService, zapLogger, trc20Config, erc20Config)
+	
+	// Start service unless explicitly disabled
+	if os.Getenv("BLOCKCHAIN_MONITOR_DISABLED") != "1" {
+		if trc20Config != nil || erc20Config != nil {
+			if err := svc.Start(); err != nil {
+				zapLogger.Error("Failed to start blockchain monitor", zap.Error(err))
+			} else {
+				zapLogger.Info("Blockchain monitor service started")
+			}
+		} else {
+			zapLogger.Warn("Blockchain monitor not started: no networks configured")
+		}
+	}
+	
+	return svc
 }

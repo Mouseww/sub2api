@@ -56,6 +56,20 @@ const (
 	FieldProviderKey = "provider_key"
 	// FieldProviderSnapshot holds the string denoting the provider_snapshot field in the database.
 	FieldProviderSnapshot = "provider_snapshot"
+	// FieldCryptoCurrency holds the string denoting the crypto_currency field in the database.
+	FieldCryptoCurrency = "crypto_currency"
+	// FieldCryptoNetwork holds the string denoting the crypto_network field in the database.
+	FieldCryptoNetwork = "crypto_network"
+	// FieldCryptoAddress holds the string denoting the crypto_address field in the database.
+	FieldCryptoAddress = "crypto_address"
+	// FieldCryptoTxHash holds the string denoting the crypto_tx_hash field in the database.
+	FieldCryptoTxHash = "crypto_tx_hash"
+	// FieldCryptoConfirmations holds the string denoting the crypto_confirmations field in the database.
+	FieldCryptoConfirmations = "crypto_confirmations"
+	// FieldCryptoRequiredConfirmations holds the string denoting the crypto_required_confirmations field in the database.
+	FieldCryptoRequiredConfirmations = "crypto_required_confirmations"
+	// FieldCryptoAmountUsd holds the string denoting the crypto_amount_usd field in the database.
+	FieldCryptoAmountUsd = "crypto_amount_usd"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldRefundAmount holds the string denoting the refund_amount field in the database.
@@ -129,6 +143,13 @@ var Columns = []string{
 	FieldProviderInstanceID,
 	FieldProviderKey,
 	FieldProviderSnapshot,
+	FieldCryptoCurrency,
+	FieldCryptoNetwork,
+	FieldCryptoAddress,
+	FieldCryptoTxHash,
+	FieldCryptoConfirmations,
+	FieldCryptoRequiredConfirmations,
+	FieldCryptoAmountUsd,
 	FieldStatus,
 	FieldRefundAmount,
 	FieldRefundReason,
@@ -184,6 +205,16 @@ var (
 	ProviderInstanceIDValidator func(string) error
 	// ProviderKeyValidator is a validator for the "provider_key" field. It is called by the builders before save.
 	ProviderKeyValidator func(string) error
+	// CryptoCurrencyValidator is a validator for the "crypto_currency" field. It is called by the builders before save.
+	CryptoCurrencyValidator func(string) error
+	// CryptoNetworkValidator is a validator for the "crypto_network" field. It is called by the builders before save.
+	CryptoNetworkValidator func(string) error
+	// CryptoAddressValidator is a validator for the "crypto_address" field. It is called by the builders before save.
+	CryptoAddressValidator func(string) error
+	// CryptoTxHashValidator is a validator for the "crypto_tx_hash" field. It is called by the builders before save.
+	CryptoTxHashValidator func(string) error
+	// DefaultCryptoConfirmations holds the default value on creation for the "crypto_confirmations" field.
+	DefaultCryptoConfirmations int
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus string
 	// StatusValidator is a validator for the "status" field. It is called by the builders before save.
@@ -312,6 +343,41 @@ func ByProviderInstanceID(opts ...sql.OrderTermOption) OrderOption {
 // ByProviderKey orders the results by the provider_key field.
 func ByProviderKey(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProviderKey, opts...).ToFunc()
+}
+
+// ByCryptoCurrency orders the results by the crypto_currency field.
+func ByCryptoCurrency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCryptoCurrency, opts...).ToFunc()
+}
+
+// ByCryptoNetwork orders the results by the crypto_network field.
+func ByCryptoNetwork(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCryptoNetwork, opts...).ToFunc()
+}
+
+// ByCryptoAddress orders the results by the crypto_address field.
+func ByCryptoAddress(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCryptoAddress, opts...).ToFunc()
+}
+
+// ByCryptoTxHash orders the results by the crypto_tx_hash field.
+func ByCryptoTxHash(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCryptoTxHash, opts...).ToFunc()
+}
+
+// ByCryptoConfirmations orders the results by the crypto_confirmations field.
+func ByCryptoConfirmations(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCryptoConfirmations, opts...).ToFunc()
+}
+
+// ByCryptoRequiredConfirmations orders the results by the crypto_required_confirmations field.
+func ByCryptoRequiredConfirmations(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCryptoRequiredConfirmations, opts...).ToFunc()
+}
+
+// ByCryptoAmountUsd orders the results by the crypto_amount_usd field.
+func ByCryptoAmountUsd(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCryptoAmountUsd, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

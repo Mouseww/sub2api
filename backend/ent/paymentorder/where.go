@@ -155,6 +155,41 @@ func ProviderKey(v string) predicate.PaymentOrder {
 	return predicate.PaymentOrder(sql.FieldEQ(FieldProviderKey, v))
 }
 
+// CryptoCurrency applies equality check predicate on the "crypto_currency" field. It's identical to CryptoCurrencyEQ.
+func CryptoCurrency(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoCurrency, v))
+}
+
+// CryptoNetwork applies equality check predicate on the "crypto_network" field. It's identical to CryptoNetworkEQ.
+func CryptoNetwork(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoNetwork, v))
+}
+
+// CryptoAddress applies equality check predicate on the "crypto_address" field. It's identical to CryptoAddressEQ.
+func CryptoAddress(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoAddress, v))
+}
+
+// CryptoTxHash applies equality check predicate on the "crypto_tx_hash" field. It's identical to CryptoTxHashEQ.
+func CryptoTxHash(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoTxHash, v))
+}
+
+// CryptoConfirmations applies equality check predicate on the "crypto_confirmations" field. It's identical to CryptoConfirmationsEQ.
+func CryptoConfirmations(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoConfirmations, v))
+}
+
+// CryptoRequiredConfirmations applies equality check predicate on the "crypto_required_confirmations" field. It's identical to CryptoRequiredConfirmationsEQ.
+func CryptoRequiredConfirmations(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoRequiredConfirmations, v))
+}
+
+// CryptoAmountUsd applies equality check predicate on the "crypto_amount_usd" field. It's identical to CryptoAmountUsdEQ.
+func CryptoAmountUsd(v float64) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoAmountUsd, v))
+}
+
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v string) predicate.PaymentOrder {
 	return predicate.PaymentOrder(sql.FieldEQ(FieldStatus, v))
@@ -1448,6 +1483,456 @@ func ProviderSnapshotIsNil() predicate.PaymentOrder {
 // ProviderSnapshotNotNil applies the NotNil predicate on the "provider_snapshot" field.
 func ProviderSnapshotNotNil() predicate.PaymentOrder {
 	return predicate.PaymentOrder(sql.FieldNotNull(FieldProviderSnapshot))
+}
+
+// CryptoCurrencyEQ applies the EQ predicate on the "crypto_currency" field.
+func CryptoCurrencyEQ(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoCurrency, v))
+}
+
+// CryptoCurrencyNEQ applies the NEQ predicate on the "crypto_currency" field.
+func CryptoCurrencyNEQ(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNEQ(FieldCryptoCurrency, v))
+}
+
+// CryptoCurrencyIn applies the In predicate on the "crypto_currency" field.
+func CryptoCurrencyIn(vs ...string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIn(FieldCryptoCurrency, vs...))
+}
+
+// CryptoCurrencyNotIn applies the NotIn predicate on the "crypto_currency" field.
+func CryptoCurrencyNotIn(vs ...string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotIn(FieldCryptoCurrency, vs...))
+}
+
+// CryptoCurrencyGT applies the GT predicate on the "crypto_currency" field.
+func CryptoCurrencyGT(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGT(FieldCryptoCurrency, v))
+}
+
+// CryptoCurrencyGTE applies the GTE predicate on the "crypto_currency" field.
+func CryptoCurrencyGTE(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGTE(FieldCryptoCurrency, v))
+}
+
+// CryptoCurrencyLT applies the LT predicate on the "crypto_currency" field.
+func CryptoCurrencyLT(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLT(FieldCryptoCurrency, v))
+}
+
+// CryptoCurrencyLTE applies the LTE predicate on the "crypto_currency" field.
+func CryptoCurrencyLTE(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLTE(FieldCryptoCurrency, v))
+}
+
+// CryptoCurrencyContains applies the Contains predicate on the "crypto_currency" field.
+func CryptoCurrencyContains(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldContains(FieldCryptoCurrency, v))
+}
+
+// CryptoCurrencyHasPrefix applies the HasPrefix predicate on the "crypto_currency" field.
+func CryptoCurrencyHasPrefix(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldHasPrefix(FieldCryptoCurrency, v))
+}
+
+// CryptoCurrencyHasSuffix applies the HasSuffix predicate on the "crypto_currency" field.
+func CryptoCurrencyHasSuffix(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldHasSuffix(FieldCryptoCurrency, v))
+}
+
+// CryptoCurrencyIsNil applies the IsNil predicate on the "crypto_currency" field.
+func CryptoCurrencyIsNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIsNull(FieldCryptoCurrency))
+}
+
+// CryptoCurrencyNotNil applies the NotNil predicate on the "crypto_currency" field.
+func CryptoCurrencyNotNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotNull(FieldCryptoCurrency))
+}
+
+// CryptoCurrencyEqualFold applies the EqualFold predicate on the "crypto_currency" field.
+func CryptoCurrencyEqualFold(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEqualFold(FieldCryptoCurrency, v))
+}
+
+// CryptoCurrencyContainsFold applies the ContainsFold predicate on the "crypto_currency" field.
+func CryptoCurrencyContainsFold(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldContainsFold(FieldCryptoCurrency, v))
+}
+
+// CryptoNetworkEQ applies the EQ predicate on the "crypto_network" field.
+func CryptoNetworkEQ(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoNetwork, v))
+}
+
+// CryptoNetworkNEQ applies the NEQ predicate on the "crypto_network" field.
+func CryptoNetworkNEQ(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNEQ(FieldCryptoNetwork, v))
+}
+
+// CryptoNetworkIn applies the In predicate on the "crypto_network" field.
+func CryptoNetworkIn(vs ...string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIn(FieldCryptoNetwork, vs...))
+}
+
+// CryptoNetworkNotIn applies the NotIn predicate on the "crypto_network" field.
+func CryptoNetworkNotIn(vs ...string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotIn(FieldCryptoNetwork, vs...))
+}
+
+// CryptoNetworkGT applies the GT predicate on the "crypto_network" field.
+func CryptoNetworkGT(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGT(FieldCryptoNetwork, v))
+}
+
+// CryptoNetworkGTE applies the GTE predicate on the "crypto_network" field.
+func CryptoNetworkGTE(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGTE(FieldCryptoNetwork, v))
+}
+
+// CryptoNetworkLT applies the LT predicate on the "crypto_network" field.
+func CryptoNetworkLT(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLT(FieldCryptoNetwork, v))
+}
+
+// CryptoNetworkLTE applies the LTE predicate on the "crypto_network" field.
+func CryptoNetworkLTE(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLTE(FieldCryptoNetwork, v))
+}
+
+// CryptoNetworkContains applies the Contains predicate on the "crypto_network" field.
+func CryptoNetworkContains(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldContains(FieldCryptoNetwork, v))
+}
+
+// CryptoNetworkHasPrefix applies the HasPrefix predicate on the "crypto_network" field.
+func CryptoNetworkHasPrefix(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldHasPrefix(FieldCryptoNetwork, v))
+}
+
+// CryptoNetworkHasSuffix applies the HasSuffix predicate on the "crypto_network" field.
+func CryptoNetworkHasSuffix(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldHasSuffix(FieldCryptoNetwork, v))
+}
+
+// CryptoNetworkIsNil applies the IsNil predicate on the "crypto_network" field.
+func CryptoNetworkIsNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIsNull(FieldCryptoNetwork))
+}
+
+// CryptoNetworkNotNil applies the NotNil predicate on the "crypto_network" field.
+func CryptoNetworkNotNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotNull(FieldCryptoNetwork))
+}
+
+// CryptoNetworkEqualFold applies the EqualFold predicate on the "crypto_network" field.
+func CryptoNetworkEqualFold(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEqualFold(FieldCryptoNetwork, v))
+}
+
+// CryptoNetworkContainsFold applies the ContainsFold predicate on the "crypto_network" field.
+func CryptoNetworkContainsFold(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldContainsFold(FieldCryptoNetwork, v))
+}
+
+// CryptoAddressEQ applies the EQ predicate on the "crypto_address" field.
+func CryptoAddressEQ(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoAddress, v))
+}
+
+// CryptoAddressNEQ applies the NEQ predicate on the "crypto_address" field.
+func CryptoAddressNEQ(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNEQ(FieldCryptoAddress, v))
+}
+
+// CryptoAddressIn applies the In predicate on the "crypto_address" field.
+func CryptoAddressIn(vs ...string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIn(FieldCryptoAddress, vs...))
+}
+
+// CryptoAddressNotIn applies the NotIn predicate on the "crypto_address" field.
+func CryptoAddressNotIn(vs ...string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotIn(FieldCryptoAddress, vs...))
+}
+
+// CryptoAddressGT applies the GT predicate on the "crypto_address" field.
+func CryptoAddressGT(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGT(FieldCryptoAddress, v))
+}
+
+// CryptoAddressGTE applies the GTE predicate on the "crypto_address" field.
+func CryptoAddressGTE(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGTE(FieldCryptoAddress, v))
+}
+
+// CryptoAddressLT applies the LT predicate on the "crypto_address" field.
+func CryptoAddressLT(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLT(FieldCryptoAddress, v))
+}
+
+// CryptoAddressLTE applies the LTE predicate on the "crypto_address" field.
+func CryptoAddressLTE(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLTE(FieldCryptoAddress, v))
+}
+
+// CryptoAddressContains applies the Contains predicate on the "crypto_address" field.
+func CryptoAddressContains(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldContains(FieldCryptoAddress, v))
+}
+
+// CryptoAddressHasPrefix applies the HasPrefix predicate on the "crypto_address" field.
+func CryptoAddressHasPrefix(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldHasPrefix(FieldCryptoAddress, v))
+}
+
+// CryptoAddressHasSuffix applies the HasSuffix predicate on the "crypto_address" field.
+func CryptoAddressHasSuffix(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldHasSuffix(FieldCryptoAddress, v))
+}
+
+// CryptoAddressIsNil applies the IsNil predicate on the "crypto_address" field.
+func CryptoAddressIsNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIsNull(FieldCryptoAddress))
+}
+
+// CryptoAddressNotNil applies the NotNil predicate on the "crypto_address" field.
+func CryptoAddressNotNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotNull(FieldCryptoAddress))
+}
+
+// CryptoAddressEqualFold applies the EqualFold predicate on the "crypto_address" field.
+func CryptoAddressEqualFold(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEqualFold(FieldCryptoAddress, v))
+}
+
+// CryptoAddressContainsFold applies the ContainsFold predicate on the "crypto_address" field.
+func CryptoAddressContainsFold(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldContainsFold(FieldCryptoAddress, v))
+}
+
+// CryptoTxHashEQ applies the EQ predicate on the "crypto_tx_hash" field.
+func CryptoTxHashEQ(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoTxHash, v))
+}
+
+// CryptoTxHashNEQ applies the NEQ predicate on the "crypto_tx_hash" field.
+func CryptoTxHashNEQ(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNEQ(FieldCryptoTxHash, v))
+}
+
+// CryptoTxHashIn applies the In predicate on the "crypto_tx_hash" field.
+func CryptoTxHashIn(vs ...string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIn(FieldCryptoTxHash, vs...))
+}
+
+// CryptoTxHashNotIn applies the NotIn predicate on the "crypto_tx_hash" field.
+func CryptoTxHashNotIn(vs ...string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotIn(FieldCryptoTxHash, vs...))
+}
+
+// CryptoTxHashGT applies the GT predicate on the "crypto_tx_hash" field.
+func CryptoTxHashGT(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGT(FieldCryptoTxHash, v))
+}
+
+// CryptoTxHashGTE applies the GTE predicate on the "crypto_tx_hash" field.
+func CryptoTxHashGTE(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGTE(FieldCryptoTxHash, v))
+}
+
+// CryptoTxHashLT applies the LT predicate on the "crypto_tx_hash" field.
+func CryptoTxHashLT(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLT(FieldCryptoTxHash, v))
+}
+
+// CryptoTxHashLTE applies the LTE predicate on the "crypto_tx_hash" field.
+func CryptoTxHashLTE(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLTE(FieldCryptoTxHash, v))
+}
+
+// CryptoTxHashContains applies the Contains predicate on the "crypto_tx_hash" field.
+func CryptoTxHashContains(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldContains(FieldCryptoTxHash, v))
+}
+
+// CryptoTxHashHasPrefix applies the HasPrefix predicate on the "crypto_tx_hash" field.
+func CryptoTxHashHasPrefix(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldHasPrefix(FieldCryptoTxHash, v))
+}
+
+// CryptoTxHashHasSuffix applies the HasSuffix predicate on the "crypto_tx_hash" field.
+func CryptoTxHashHasSuffix(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldHasSuffix(FieldCryptoTxHash, v))
+}
+
+// CryptoTxHashIsNil applies the IsNil predicate on the "crypto_tx_hash" field.
+func CryptoTxHashIsNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIsNull(FieldCryptoTxHash))
+}
+
+// CryptoTxHashNotNil applies the NotNil predicate on the "crypto_tx_hash" field.
+func CryptoTxHashNotNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotNull(FieldCryptoTxHash))
+}
+
+// CryptoTxHashEqualFold applies the EqualFold predicate on the "crypto_tx_hash" field.
+func CryptoTxHashEqualFold(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEqualFold(FieldCryptoTxHash, v))
+}
+
+// CryptoTxHashContainsFold applies the ContainsFold predicate on the "crypto_tx_hash" field.
+func CryptoTxHashContainsFold(v string) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldContainsFold(FieldCryptoTxHash, v))
+}
+
+// CryptoConfirmationsEQ applies the EQ predicate on the "crypto_confirmations" field.
+func CryptoConfirmationsEQ(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoConfirmations, v))
+}
+
+// CryptoConfirmationsNEQ applies the NEQ predicate on the "crypto_confirmations" field.
+func CryptoConfirmationsNEQ(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNEQ(FieldCryptoConfirmations, v))
+}
+
+// CryptoConfirmationsIn applies the In predicate on the "crypto_confirmations" field.
+func CryptoConfirmationsIn(vs ...int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIn(FieldCryptoConfirmations, vs...))
+}
+
+// CryptoConfirmationsNotIn applies the NotIn predicate on the "crypto_confirmations" field.
+func CryptoConfirmationsNotIn(vs ...int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotIn(FieldCryptoConfirmations, vs...))
+}
+
+// CryptoConfirmationsGT applies the GT predicate on the "crypto_confirmations" field.
+func CryptoConfirmationsGT(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGT(FieldCryptoConfirmations, v))
+}
+
+// CryptoConfirmationsGTE applies the GTE predicate on the "crypto_confirmations" field.
+func CryptoConfirmationsGTE(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGTE(FieldCryptoConfirmations, v))
+}
+
+// CryptoConfirmationsLT applies the LT predicate on the "crypto_confirmations" field.
+func CryptoConfirmationsLT(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLT(FieldCryptoConfirmations, v))
+}
+
+// CryptoConfirmationsLTE applies the LTE predicate on the "crypto_confirmations" field.
+func CryptoConfirmationsLTE(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLTE(FieldCryptoConfirmations, v))
+}
+
+// CryptoConfirmationsIsNil applies the IsNil predicate on the "crypto_confirmations" field.
+func CryptoConfirmationsIsNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIsNull(FieldCryptoConfirmations))
+}
+
+// CryptoConfirmationsNotNil applies the NotNil predicate on the "crypto_confirmations" field.
+func CryptoConfirmationsNotNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotNull(FieldCryptoConfirmations))
+}
+
+// CryptoRequiredConfirmationsEQ applies the EQ predicate on the "crypto_required_confirmations" field.
+func CryptoRequiredConfirmationsEQ(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoRequiredConfirmations, v))
+}
+
+// CryptoRequiredConfirmationsNEQ applies the NEQ predicate on the "crypto_required_confirmations" field.
+func CryptoRequiredConfirmationsNEQ(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNEQ(FieldCryptoRequiredConfirmations, v))
+}
+
+// CryptoRequiredConfirmationsIn applies the In predicate on the "crypto_required_confirmations" field.
+func CryptoRequiredConfirmationsIn(vs ...int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIn(FieldCryptoRequiredConfirmations, vs...))
+}
+
+// CryptoRequiredConfirmationsNotIn applies the NotIn predicate on the "crypto_required_confirmations" field.
+func CryptoRequiredConfirmationsNotIn(vs ...int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotIn(FieldCryptoRequiredConfirmations, vs...))
+}
+
+// CryptoRequiredConfirmationsGT applies the GT predicate on the "crypto_required_confirmations" field.
+func CryptoRequiredConfirmationsGT(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGT(FieldCryptoRequiredConfirmations, v))
+}
+
+// CryptoRequiredConfirmationsGTE applies the GTE predicate on the "crypto_required_confirmations" field.
+func CryptoRequiredConfirmationsGTE(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGTE(FieldCryptoRequiredConfirmations, v))
+}
+
+// CryptoRequiredConfirmationsLT applies the LT predicate on the "crypto_required_confirmations" field.
+func CryptoRequiredConfirmationsLT(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLT(FieldCryptoRequiredConfirmations, v))
+}
+
+// CryptoRequiredConfirmationsLTE applies the LTE predicate on the "crypto_required_confirmations" field.
+func CryptoRequiredConfirmationsLTE(v int) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLTE(FieldCryptoRequiredConfirmations, v))
+}
+
+// CryptoRequiredConfirmationsIsNil applies the IsNil predicate on the "crypto_required_confirmations" field.
+func CryptoRequiredConfirmationsIsNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIsNull(FieldCryptoRequiredConfirmations))
+}
+
+// CryptoRequiredConfirmationsNotNil applies the NotNil predicate on the "crypto_required_confirmations" field.
+func CryptoRequiredConfirmationsNotNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotNull(FieldCryptoRequiredConfirmations))
+}
+
+// CryptoAmountUsdEQ applies the EQ predicate on the "crypto_amount_usd" field.
+func CryptoAmountUsdEQ(v float64) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldEQ(FieldCryptoAmountUsd, v))
+}
+
+// CryptoAmountUsdNEQ applies the NEQ predicate on the "crypto_amount_usd" field.
+func CryptoAmountUsdNEQ(v float64) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNEQ(FieldCryptoAmountUsd, v))
+}
+
+// CryptoAmountUsdIn applies the In predicate on the "crypto_amount_usd" field.
+func CryptoAmountUsdIn(vs ...float64) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIn(FieldCryptoAmountUsd, vs...))
+}
+
+// CryptoAmountUsdNotIn applies the NotIn predicate on the "crypto_amount_usd" field.
+func CryptoAmountUsdNotIn(vs ...float64) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotIn(FieldCryptoAmountUsd, vs...))
+}
+
+// CryptoAmountUsdGT applies the GT predicate on the "crypto_amount_usd" field.
+func CryptoAmountUsdGT(v float64) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGT(FieldCryptoAmountUsd, v))
+}
+
+// CryptoAmountUsdGTE applies the GTE predicate on the "crypto_amount_usd" field.
+func CryptoAmountUsdGTE(v float64) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldGTE(FieldCryptoAmountUsd, v))
+}
+
+// CryptoAmountUsdLT applies the LT predicate on the "crypto_amount_usd" field.
+func CryptoAmountUsdLT(v float64) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLT(FieldCryptoAmountUsd, v))
+}
+
+// CryptoAmountUsdLTE applies the LTE predicate on the "crypto_amount_usd" field.
+func CryptoAmountUsdLTE(v float64) predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldLTE(FieldCryptoAmountUsd, v))
+}
+
+// CryptoAmountUsdIsNil applies the IsNil predicate on the "crypto_amount_usd" field.
+func CryptoAmountUsdIsNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldIsNull(FieldCryptoAmountUsd))
+}
+
+// CryptoAmountUsdNotNil applies the NotNil predicate on the "crypto_amount_usd" field.
+func CryptoAmountUsdNotNil() predicate.PaymentOrder {
+	return predicate.PaymentOrder(sql.FieldNotNull(FieldCryptoAmountUsd))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

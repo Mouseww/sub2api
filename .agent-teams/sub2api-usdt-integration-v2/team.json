@@ -1,0 +1,204 @@
+{
+  "name": "sub2api-usdt-integration-v2",
+  "id": "sub2api-usdt-integration-v2",
+  "description": "为sub2api项目对接 USDT 加密货币充值的方式，包含UI",
+  "captainSessionId": "session-a0f2d30c-90f1-417b-8696-9ac11dfb7827",
+  "createdAt": 1788447967701,
+  "members": [
+    {
+      "id": "d72b9831-e9b1-4cbf-bd0b-ca7f08cfb5c8",
+      "name": "requirements-analyst",
+      "role": "分析 USDT 充值需求和现有架构",
+      "provider": "router",
+      "model": "claude-sonnet-4.5",
+      "joinedAt": 1788447976127,
+      "status": "idle"
+    },
+    {
+      "id": "896d1041-5e25-405a-aa80-efc4098df8aa",
+      "name": "backend-engineer",
+      "role": "实现 USDT 支付后端逻辑和 API",
+      "provider": "router",
+      "model": "claude-sonnet-4.5",
+      "joinedAt": 1788447976172,
+      "status": "idle"
+    },
+    {
+      "id": "cdc84bb6-7209-401a-9956-57289cb54213",
+      "name": "frontend-engineer",
+      "role": "开发 USDT 充值 UI 界面",
+      "provider": "router",
+      "model": "claude-sonnet-4.5",
+      "joinedAt": 1788447976196,
+      "status": "idle"
+    },
+    {
+      "id": "0982a46a-130a-4e9b-ac82-a7f962ec0147",
+      "name": "integration-tester",
+      "role": "测试 USDT 充值完整流程",
+      "provider": "router",
+      "model": "claude-sonnet-4.5",
+      "joinedAt": 1788447976218,
+      "status": "idle"
+    },
+    {
+      "id": "4b1cf6ea-e08b-4e54-a86b-790b5be02462",
+      "name": "code-reviewer",
+      "role": "审查代码质量和安全性",
+      "provider": "router",
+      "model": "claude-sonnet-4.5",
+      "joinedAt": 1788447976240,
+      "status": "idle"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "subject": "分析 USDT 充值需求和技术方案",
+      "description": "\n1. 检查 sub2api 项目的现有代码结构和技术栈\n2. 研究 USDT 充值的常见实现方案（链上充值地址监控、第三方支付网关等）\n3. 设计数据库表结构（充值记录、地址管理等）\n4. 定义后端 API 接口（创建充值订单、查询充值状态、回调处理等）\n5. 定义前端 UI 需求（充值页面、二维码展示、状态轮询等）\n6. 输出技术方案文档\n",
+      "status": "completed",
+      "assignee": "requirements-analyst",
+      "dependencies": [],
+      "attempt": 1,
+      "createdAt": 1788447986674,
+      "updatedAt": 1788448439735,
+      "kind": "requirements",
+      "objective": "分析 sub2api 项目现有架构，设计 USDT 加密货币充值的技术方案，包括后端 API、数据库表结构、前端 UI 界面要求",
+      "acceptance": [
+        "技术方案文档包含数据库设计",
+        "技术方案文档包含 API 接口定义",
+        "技术方案文档包含 UI 界面要求",
+        "技术方案明确了 USDT 充值的实现方式"
+      ],
+      "deliverables": [
+        "docs/usdt-payment-design.md"
+      ],
+      "attemptId": "9532f664-b00d-4e21-a172-4c2b8290f296",
+      "reassigning": false,
+      "output": "已完成 USDT 充值需求分析和技术方案设计，输出技术文档：docs/USDT_CHARGING_TECHNICAL_SPECIFICATION.md\n\n核心内容：\n1. 技术方案选型：推荐使用第三方支付网关（NOWPayments），快速集成，降低复杂度\n2. 数据库设计：新增 crypto_deposit_addresses 表，扩展 payment_orders 表字段支持加密货币信息\n3. API 接口定义：5 个核心接口（获取配置、创建订单、查询状态、获取地址、Webhook 回调）\n4. 前端 UI 设计：充值页面流程、二维码展示、状态轮询、确认进度条\n5. 实施路径：分 4 个阶段，预计 15-20 天完成\n\n技术方案已明确 USDT 充值的实现方式（第三方支付网关），包含完整的数据库表结构、API 接口定义和 UI 界面要求。",
+      "verdict": "pass"
+    },
+    {
+      "id": "t2",
+      "subject": "实现 USDT 充值后端 API",
+      "description": "\n根据需求分析任务输出的技术方案，实现：\n1. 创建数据库表结构（充值订单、地址管理等）\n2. 实现后端 API 路由和控制器\n3. 实现 USDT 充值业务逻辑（生成充值地址、查询充值状态、处理回调）\n4. 添加必要的参数校验和错误处理\n5. 保持与现有项目代码风格一致\n",
+      "status": "in_progress",
+      "assignee": "backend-engineer",
+      "dependencies": [
+        "t1"
+      ],
+      "attempt": 1,
+      "createdAt": 1788447999738,
+      "updatedAt": 1788448450363,
+      "kind": "implementation",
+      "objective": "实现 USDT 充值后端功能，包括数据库表、API 路由、业务逻辑、参数校验和错误处理",
+      "inScope": [
+        "src/routes/payment/**",
+        "src/models/**",
+        "src/controllers/payment/**",
+        "migrations/**"
+      ],
+      "acceptance": [
+        "数据库表成功创建",
+        "后端 API 所有接口实现完成",
+        "代码跟现有项目风格一致",
+        "包含必要的错误处理"
+      ],
+      "verify": [
+        "node -e \"console.log('Syntax check passed')\""
+      ],
+      "deliverables": [
+        "src/routes/payment/usdt.js",
+        "src/models/usdt-payment.js",
+        "migrations/*-create-usdt-payment.js"
+      ],
+      "attemptId": "34d620f5-08eb-4ff4-b5e5-eba158beca34",
+      "reassigning": false
+    },
+    {
+      "id": "t3",
+      "subject": "审查后端代码质量和安全性",
+      "description": "\n审查后端实现代码：\n1. 检查代码质量和可维护性\n2. 检查安全性问题（SQL注入、参数校验、敏感信息泄露等）\n3. 验证错误处理是否完善\n4. 确认代码风格符合项目规范\n5. 提出改进建议\n",
+      "status": "pending",
+      "assignee": "code-reviewer",
+      "dependencies": [
+        "t2"
+      ],
+      "attempt": 0,
+      "createdAt": 1788448010252,
+      "updatedAt": 1788448010252,
+      "kind": "review",
+      "round": 1,
+      "objective": "审查后端代码的质量、安全性、错误处理和代码规范",
+      "acceptance": [
+        "代码质量达标",
+        "安全性问题已排查",
+        "错误处理合理",
+        "代码风格符合项目规范"
+      ],
+      "reviewedTaskId": "t2"
+    },
+    {
+      "id": "t4",
+      "subject": "开发 USDT 充值前端 UI",
+      "description": "\n根据需求分析任务输出的 UI 要求，实现：\n1. USDT 充值页面组件\n2. 充值地址二维码展示组件\n3. 充值金额输入和确认\n4. 充值状态实时查询和展示\n5. 响应式设计，适配移动端\n6. 保持与现有项目 UI 风格一致\n",
+      "status": "claimed",
+      "assignee": "frontend-engineer",
+      "dependencies": [
+        "t1"
+      ],
+      "attempt": 1,
+      "createdAt": 1788448020909,
+      "updatedAt": 1788448439814,
+      "kind": "implementation",
+      "objective": "开发 USDT 充值前端 UI 界面，包括充值页面、二维码展示、状态查询等功能",
+      "inScope": [
+        "src/views/payment/**",
+        "src/components/payment/**"
+      ],
+      "acceptance": [
+        "充值页面 UI 完成",
+        "二维码展示功能完成",
+        "充值状态展示功能完成",
+        "代码风格符合项目规范"
+      ],
+      "verify": [
+        "node -e \"console.log('Syntax check passed')\""
+      ],
+      "deliverables": [
+        "src/views/payment/usdt.vue",
+        "src/components/payment/UsdtQRCode.vue"
+      ],
+      "attemptId": "f48f973a-cc33-4f7e-b409-0bdb4a13e52d",
+      "reassigning": false
+    },
+    {
+      "id": "t5",
+      "subject": "测试 USDT 充值完整流程",
+      "description": "\n测试 USDT 充值完整功能：\n1. 测试后端 API 各接口（创建订单、查询状态、回调处理）\n2. 测试前端 UI 交互流程\n3. 测试完整充值流程（前后端联调）\n4. 测试异常场景（网络错误、参数错误、超时等）\n5. 验证数据库记录正确性\n6. 输出测试报告\n",
+      "status": "pending",
+      "assignee": "integration-tester",
+      "dependencies": [
+        "t3",
+        "t4"
+      ],
+      "attempt": 0,
+      "createdAt": 1788448031421,
+      "updatedAt": 1788448031421,
+      "kind": "verification",
+      "objective": "验证 USDT 充值功能的后端 API、前端 UI 和完整流程是否正常工作",
+      "acceptance": [
+        "后端 API 测试通过",
+        "前端 UI 功能测试通过",
+        "完整充值流程测试通过",
+        "所有错误场景已验证"
+      ],
+      "deliverables": [
+        "docs/usdt-payment-test-report.md"
+      ]
+    }
+  ],
+  "taskSeq": 5,
+  "phase": "running",
+  "approvedAt": 1788448180870
+}

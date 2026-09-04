@@ -1,0 +1,12 @@
+{
+  "name": "sub2api-usdt-recharge",
+  "id": "sub2api-usdt-recharge",
+  "description": "为 sub2api 对接 USDT 加密货币充值能力，覆盖链/网络配置、充值订单与链上确认、余额入账、管理端与用户端 UI、迁移、测试和安全审查。",
+  "captainSessionId": "session-494771fb-a1c5-4b39-b383-89112d739d61",
+  "createdAt": 1788449207617,
+  "members": [],
+  "tasks": [],
+  "taskSeq": 0,
+  "phase": "staged",
+  "planReviewState": "awaiting_review"
+}

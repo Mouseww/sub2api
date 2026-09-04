@@ -61,6 +61,20 @@ type PaymentOrder struct {
 	ProviderKey *string `json:"provider_key,omitempty"`
 	// ProviderSnapshot holds the value of the "provider_snapshot" field.
 	ProviderSnapshot map[string]interface{} `json:"provider_snapshot,omitempty"`
+	// 加密货币类型，如 'USDT'
+	CryptoCurrency *string `json:"crypto_currency,omitempty"`
+	// 区块链网络，如 'TRC20', 'ERC20', 'BEP20'
+	CryptoNetwork *string `json:"crypto_network,omitempty"`
+	// 充值地址
+	CryptoAddress *string `json:"crypto_address,omitempty"`
+	// 区块链交易哈希
+	CryptoTxHash *string `json:"crypto_tx_hash,omitempty"`
+	// 当前确认数
+	CryptoConfirmations *int `json:"crypto_confirmations,omitempty"`
+	// 所需确认数
+	CryptoRequiredConfirmations *int `json:"crypto_required_confirmations,omitempty"`
+	// 美元等值金额（用于汇率锁定）
+	CryptoAmountUsd *float64 `json:"crypto_amount_usd,omitempty"`
 	// Status holds the value of the "status" field.
 	Status string `json:"status,omitempty"`
 	// RefundAmount holds the value of the "refund_amount" field.
@@ -132,11 +146,11 @@ func (*PaymentOrder) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case paymentorder.FieldForceRefund:
 			values[i] = new(sql.NullBool)
-		case paymentorder.FieldAmount, paymentorder.FieldPayAmount, paymentorder.FieldFeeRate, paymentorder.FieldRefundAmount:
+		case paymentorder.FieldAmount, paymentorder.FieldPayAmount, paymentorder.FieldFeeRate, paymentorder.FieldCryptoAmountUsd, paymentorder.FieldRefundAmount:
 			values[i] = new(sql.NullFloat64)
-		case paymentorder.FieldID, paymentorder.FieldUserID, paymentorder.FieldPlanID, paymentorder.FieldSubscriptionGroupID, paymentorder.FieldSubscriptionDays:
+		case paymentorder.FieldID, paymentorder.FieldUserID, paymentorder.FieldPlanID, paymentorder.FieldSubscriptionGroupID, paymentorder.FieldSubscriptionDays, paymentorder.FieldCryptoConfirmations, paymentorder.FieldCryptoRequiredConfirmations:
 			values[i] = new(sql.NullInt64)
-		case paymentorder.FieldUserEmail, paymentorder.FieldUserName, paymentorder.FieldUserNotes, paymentorder.FieldRechargeCode, paymentorder.FieldOutTradeNo, paymentorder.FieldPaymentType, paymentorder.FieldPaymentTradeNo, paymentorder.FieldPayURL, paymentorder.FieldQrCode, paymentorder.FieldQrCodeImg, paymentorder.FieldOrderType, paymentorder.FieldProviderInstanceID, paymentorder.FieldProviderKey, paymentorder.FieldStatus, paymentorder.FieldRefundReason, paymentorder.FieldRefundRequestReason, paymentorder.FieldRefundRequestedBy, paymentorder.FieldFailedReason, paymentorder.FieldClientIP, paymentorder.FieldSrcHost, paymentorder.FieldSrcURL:
+		case paymentorder.FieldUserEmail, paymentorder.FieldUserName, paymentorder.FieldUserNotes, paymentorder.FieldRechargeCode, paymentorder.FieldOutTradeNo, paymentorder.FieldPaymentType, paymentorder.FieldPaymentTradeNo, paymentorder.FieldPayURL, paymentorder.FieldQrCode, paymentorder.FieldQrCodeImg, paymentorder.FieldOrderType, paymentorder.FieldProviderInstanceID, paymentorder.FieldProviderKey, paymentorder.FieldCryptoCurrency, paymentorder.FieldCryptoNetwork, paymentorder.FieldCryptoAddress, paymentorder.FieldCryptoTxHash, paymentorder.FieldStatus, paymentorder.FieldRefundReason, paymentorder.FieldRefundRequestReason, paymentorder.FieldRefundRequestedBy, paymentorder.FieldFailedReason, paymentorder.FieldClientIP, paymentorder.FieldSrcHost, paymentorder.FieldSrcURL:
 			values[i] = new(sql.NullString)
 		case paymentorder.FieldRefundAt, paymentorder.FieldRefundRequestedAt, paymentorder.FieldExpiresAt, paymentorder.FieldPaidAt, paymentorder.FieldCompletedAt, paymentorder.FieldFailedAt, paymentorder.FieldCreatedAt, paymentorder.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -297,6 +311,55 @@ func (_m *PaymentOrder) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.ProviderSnapshot); err != nil {
 					return fmt.Errorf("unmarshal field provider_snapshot: %w", err)
 				}
+			}
+		case paymentorder.FieldCryptoCurrency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field crypto_currency", values[i])
+			} else if value.Valid {
+				_m.CryptoCurrency = new(string)
+				*_m.CryptoCurrency = value.String
+			}
+		case paymentorder.FieldCryptoNetwork:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field crypto_network", values[i])
+			} else if value.Valid {
+				_m.CryptoNetwork = new(string)
+				*_m.CryptoNetwork = value.String
+			}
+		case paymentorder.FieldCryptoAddress:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field crypto_address", values[i])
+			} else if value.Valid {
+				_m.CryptoAddress = new(string)
+				*_m.CryptoAddress = value.String
+			}
+		case paymentorder.FieldCryptoTxHash:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field crypto_tx_hash", values[i])
+			} else if value.Valid {
+				_m.CryptoTxHash = new(string)
+				*_m.CryptoTxHash = value.String
+			}
+		case paymentorder.FieldCryptoConfirmations:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field crypto_confirmations", values[i])
+			} else if value.Valid {
+				_m.CryptoConfirmations = new(int)
+				*_m.CryptoConfirmations = int(value.Int64)
+			}
+		case paymentorder.FieldCryptoRequiredConfirmations:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field crypto_required_confirmations", values[i])
+			} else if value.Valid {
+				_m.CryptoRequiredConfirmations = new(int)
+				*_m.CryptoRequiredConfirmations = int(value.Int64)
+			}
+		case paymentorder.FieldCryptoAmountUsd:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field crypto_amount_usd", values[i])
+			} else if value.Valid {
+				_m.CryptoAmountUsd = new(float64)
+				*_m.CryptoAmountUsd = value.Float64
 			}
 		case paymentorder.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -537,6 +600,41 @@ func (_m *PaymentOrder) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("provider_snapshot=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderSnapshot))
+	builder.WriteString(", ")
+	if v := _m.CryptoCurrency; v != nil {
+		builder.WriteString("crypto_currency=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.CryptoNetwork; v != nil {
+		builder.WriteString("crypto_network=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.CryptoAddress; v != nil {
+		builder.WriteString("crypto_address=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.CryptoTxHash; v != nil {
+		builder.WriteString("crypto_tx_hash=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.CryptoConfirmations; v != nil {
+		builder.WriteString("crypto_confirmations=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.CryptoRequiredConfirmations; v != nil {
+		builder.WriteString("crypto_required_confirmations=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.CryptoAmountUsd; v != nil {
+		builder.WriteString("crypto_amount_usd=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(_m.Status)

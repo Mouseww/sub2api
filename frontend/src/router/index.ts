@@ -374,6 +374,18 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/payment/usdt',
+    name: 'UsdtPayment',
+    component: () => import('@/views/user/UsdtPaymentView.vue'),
+    meta: {
+      requiresAuth: false,
+      requiresAdmin: false,
+      title: 'USDT Payment',
+      titleKey: 'payment.usdt.title',
+      requiresPayment: false
+    }
+  },
+  {
     path: '/payment/stripe-popup',
     name: 'StripePopup',
     component: () => import('@/views/user/StripePopupView.vue'),

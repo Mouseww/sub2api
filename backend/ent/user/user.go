@@ -91,6 +91,8 @@ const (
 	EdgePendingAuthSessions = "pending_auth_sessions"
 	// EdgePlatformQuotas holds the string denoting the platform_quotas edge name in mutations.
 	EdgePlatformQuotas = "platform_quotas"
+	// EdgeCryptoDepositAddresses holds the string denoting the crypto_deposit_addresses edge name in mutations.
+	EdgeCryptoDepositAddresses = "crypto_deposit_addresses"
 	// EdgeUserAllowedGroups holds the string denoting the user_allowed_groups edge name in mutations.
 	EdgeUserAllowedGroups = "user_allowed_groups"
 	// Table holds the table name of the user in the database.
@@ -184,6 +186,13 @@ const (
 	PlatformQuotasInverseTable = "user_platform_quotas"
 	// PlatformQuotasColumn is the table column denoting the platform_quotas relation/edge.
 	PlatformQuotasColumn = "user_id"
+	// CryptoDepositAddressesTable is the table that holds the crypto_deposit_addresses relation/edge.
+	CryptoDepositAddressesTable = "crypto_deposit_addresses"
+	// CryptoDepositAddressesInverseTable is the table name for the CryptoDepositAddress entity.
+	// It exists in this package in order to avoid circular dependency with the "cryptodepositaddress" package.
+	CryptoDepositAddressesInverseTable = "crypto_deposit_addresses"
+	// CryptoDepositAddressesColumn is the table column denoting the crypto_deposit_addresses relation/edge.
+	CryptoDepositAddressesColumn = "user_id"
 	// UserAllowedGroupsTable is the table that holds the user_allowed_groups relation/edge.
 	UserAllowedGroupsTable = "user_allowed_groups"
 	// UserAllowedGroupsInverseTable is the table name for the UserAllowedGroup entity.
@@ -612,6 +621,20 @@ func ByPlatformQuotas(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByCryptoDepositAddressesCount orders the results by crypto_deposit_addresses count.
+func ByCryptoDepositAddressesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCryptoDepositAddressesStep(), opts...)
+	}
+}
+
+// ByCryptoDepositAddresses orders the results by crypto_deposit_addresses terms.
+func ByCryptoDepositAddresses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCryptoDepositAddressesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByUserAllowedGroupsCount orders the results by user_allowed_groups count.
 func ByUserAllowedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -714,6 +737,13 @@ func newPlatformQuotasStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PlatformQuotasInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PlatformQuotasTable, PlatformQuotasColumn),
+	)
+}
+func newCryptoDepositAddressesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CryptoDepositAddressesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CryptoDepositAddressesTable, CryptoDepositAddressesColumn),
 	)
 }
 func newUserAllowedGroupsStep() *sqlgraph.Step {

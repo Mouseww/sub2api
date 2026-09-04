@@ -245,6 +245,104 @@ func (_c *PaymentOrderCreate) SetProviderSnapshot(v map[string]interface{}) *Pay
 	return _c
 }
 
+// SetCryptoCurrency sets the "crypto_currency" field.
+func (_c *PaymentOrderCreate) SetCryptoCurrency(v string) *PaymentOrderCreate {
+	_c.mutation.SetCryptoCurrency(v)
+	return _c
+}
+
+// SetNillableCryptoCurrency sets the "crypto_currency" field if the given value is not nil.
+func (_c *PaymentOrderCreate) SetNillableCryptoCurrency(v *string) *PaymentOrderCreate {
+	if v != nil {
+		_c.SetCryptoCurrency(*v)
+	}
+	return _c
+}
+
+// SetCryptoNetwork sets the "crypto_network" field.
+func (_c *PaymentOrderCreate) SetCryptoNetwork(v string) *PaymentOrderCreate {
+	_c.mutation.SetCryptoNetwork(v)
+	return _c
+}
+
+// SetNillableCryptoNetwork sets the "crypto_network" field if the given value is not nil.
+func (_c *PaymentOrderCreate) SetNillableCryptoNetwork(v *string) *PaymentOrderCreate {
+	if v != nil {
+		_c.SetCryptoNetwork(*v)
+	}
+	return _c
+}
+
+// SetCryptoAddress sets the "crypto_address" field.
+func (_c *PaymentOrderCreate) SetCryptoAddress(v string) *PaymentOrderCreate {
+	_c.mutation.SetCryptoAddress(v)
+	return _c
+}
+
+// SetNillableCryptoAddress sets the "crypto_address" field if the given value is not nil.
+func (_c *PaymentOrderCreate) SetNillableCryptoAddress(v *string) *PaymentOrderCreate {
+	if v != nil {
+		_c.SetCryptoAddress(*v)
+	}
+	return _c
+}
+
+// SetCryptoTxHash sets the "crypto_tx_hash" field.
+func (_c *PaymentOrderCreate) SetCryptoTxHash(v string) *PaymentOrderCreate {
+	_c.mutation.SetCryptoTxHash(v)
+	return _c
+}
+
+// SetNillableCryptoTxHash sets the "crypto_tx_hash" field if the given value is not nil.
+func (_c *PaymentOrderCreate) SetNillableCryptoTxHash(v *string) *PaymentOrderCreate {
+	if v != nil {
+		_c.SetCryptoTxHash(*v)
+	}
+	return _c
+}
+
+// SetCryptoConfirmations sets the "crypto_confirmations" field.
+func (_c *PaymentOrderCreate) SetCryptoConfirmations(v int) *PaymentOrderCreate {
+	_c.mutation.SetCryptoConfirmations(v)
+	return _c
+}
+
+// SetNillableCryptoConfirmations sets the "crypto_confirmations" field if the given value is not nil.
+func (_c *PaymentOrderCreate) SetNillableCryptoConfirmations(v *int) *PaymentOrderCreate {
+	if v != nil {
+		_c.SetCryptoConfirmations(*v)
+	}
+	return _c
+}
+
+// SetCryptoRequiredConfirmations sets the "crypto_required_confirmations" field.
+func (_c *PaymentOrderCreate) SetCryptoRequiredConfirmations(v int) *PaymentOrderCreate {
+	_c.mutation.SetCryptoRequiredConfirmations(v)
+	return _c
+}
+
+// SetNillableCryptoRequiredConfirmations sets the "crypto_required_confirmations" field if the given value is not nil.
+func (_c *PaymentOrderCreate) SetNillableCryptoRequiredConfirmations(v *int) *PaymentOrderCreate {
+	if v != nil {
+		_c.SetCryptoRequiredConfirmations(*v)
+	}
+	return _c
+}
+
+// SetCryptoAmountUsd sets the "crypto_amount_usd" field.
+func (_c *PaymentOrderCreate) SetCryptoAmountUsd(v float64) *PaymentOrderCreate {
+	_c.mutation.SetCryptoAmountUsd(v)
+	return _c
+}
+
+// SetNillableCryptoAmountUsd sets the "crypto_amount_usd" field if the given value is not nil.
+func (_c *PaymentOrderCreate) SetNillableCryptoAmountUsd(v *float64) *PaymentOrderCreate {
+	if v != nil {
+		_c.SetCryptoAmountUsd(*v)
+	}
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *PaymentOrderCreate) SetStatus(v string) *PaymentOrderCreate {
 	_c.mutation.SetStatus(v)
@@ -525,6 +623,10 @@ func (_c *PaymentOrderCreate) defaults() {
 		v := paymentorder.DefaultOrderType
 		_c.mutation.SetOrderType(v)
 	}
+	if _, ok := _c.mutation.CryptoConfirmations(); !ok {
+		v := paymentorder.DefaultCryptoConfirmations
+		_c.mutation.SetCryptoConfirmations(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := paymentorder.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -625,6 +727,26 @@ func (_c *PaymentOrderCreate) check() error {
 	if v, ok := _c.mutation.ProviderKey(); ok {
 		if err := paymentorder.ProviderKeyValidator(v); err != nil {
 			return &ValidationError{Name: "provider_key", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.provider_key": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.CryptoCurrency(); ok {
+		if err := paymentorder.CryptoCurrencyValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_currency", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_currency": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.CryptoNetwork(); ok {
+		if err := paymentorder.CryptoNetworkValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_network", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_network": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.CryptoAddress(); ok {
+		if err := paymentorder.CryptoAddressValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_address", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_address": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.CryptoTxHash(); ok {
+		if err := paymentorder.CryptoTxHashValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_tx_hash", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_tx_hash": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Status(); !ok {
@@ -780,6 +902,34 @@ func (_c *PaymentOrderCreate) createSpec() (*PaymentOrder, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.ProviderSnapshot(); ok {
 		_spec.SetField(paymentorder.FieldProviderSnapshot, field.TypeJSON, value)
 		_node.ProviderSnapshot = value
+	}
+	if value, ok := _c.mutation.CryptoCurrency(); ok {
+		_spec.SetField(paymentorder.FieldCryptoCurrency, field.TypeString, value)
+		_node.CryptoCurrency = &value
+	}
+	if value, ok := _c.mutation.CryptoNetwork(); ok {
+		_spec.SetField(paymentorder.FieldCryptoNetwork, field.TypeString, value)
+		_node.CryptoNetwork = &value
+	}
+	if value, ok := _c.mutation.CryptoAddress(); ok {
+		_spec.SetField(paymentorder.FieldCryptoAddress, field.TypeString, value)
+		_node.CryptoAddress = &value
+	}
+	if value, ok := _c.mutation.CryptoTxHash(); ok {
+		_spec.SetField(paymentorder.FieldCryptoTxHash, field.TypeString, value)
+		_node.CryptoTxHash = &value
+	}
+	if value, ok := _c.mutation.CryptoConfirmations(); ok {
+		_spec.SetField(paymentorder.FieldCryptoConfirmations, field.TypeInt, value)
+		_node.CryptoConfirmations = &value
+	}
+	if value, ok := _c.mutation.CryptoRequiredConfirmations(); ok {
+		_spec.SetField(paymentorder.FieldCryptoRequiredConfirmations, field.TypeInt, value)
+		_node.CryptoRequiredConfirmations = &value
+	}
+	if value, ok := _c.mutation.CryptoAmountUsd(); ok {
+		_spec.SetField(paymentorder.FieldCryptoAmountUsd, field.TypeFloat64, value)
+		_node.CryptoAmountUsd = &value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(paymentorder.FieldStatus, field.TypeString, value)
@@ -1267,6 +1417,150 @@ func (u *PaymentOrderUpsert) UpdateProviderSnapshot() *PaymentOrderUpsert {
 // ClearProviderSnapshot clears the value of the "provider_snapshot" field.
 func (u *PaymentOrderUpsert) ClearProviderSnapshot() *PaymentOrderUpsert {
 	u.SetNull(paymentorder.FieldProviderSnapshot)
+	return u
+}
+
+// SetCryptoCurrency sets the "crypto_currency" field.
+func (u *PaymentOrderUpsert) SetCryptoCurrency(v string) *PaymentOrderUpsert {
+	u.Set(paymentorder.FieldCryptoCurrency, v)
+	return u
+}
+
+// UpdateCryptoCurrency sets the "crypto_currency" field to the value that was provided on create.
+func (u *PaymentOrderUpsert) UpdateCryptoCurrency() *PaymentOrderUpsert {
+	u.SetExcluded(paymentorder.FieldCryptoCurrency)
+	return u
+}
+
+// ClearCryptoCurrency clears the value of the "crypto_currency" field.
+func (u *PaymentOrderUpsert) ClearCryptoCurrency() *PaymentOrderUpsert {
+	u.SetNull(paymentorder.FieldCryptoCurrency)
+	return u
+}
+
+// SetCryptoNetwork sets the "crypto_network" field.
+func (u *PaymentOrderUpsert) SetCryptoNetwork(v string) *PaymentOrderUpsert {
+	u.Set(paymentorder.FieldCryptoNetwork, v)
+	return u
+}
+
+// UpdateCryptoNetwork sets the "crypto_network" field to the value that was provided on create.
+func (u *PaymentOrderUpsert) UpdateCryptoNetwork() *PaymentOrderUpsert {
+	u.SetExcluded(paymentorder.FieldCryptoNetwork)
+	return u
+}
+
+// ClearCryptoNetwork clears the value of the "crypto_network" field.
+func (u *PaymentOrderUpsert) ClearCryptoNetwork() *PaymentOrderUpsert {
+	u.SetNull(paymentorder.FieldCryptoNetwork)
+	return u
+}
+
+// SetCryptoAddress sets the "crypto_address" field.
+func (u *PaymentOrderUpsert) SetCryptoAddress(v string) *PaymentOrderUpsert {
+	u.Set(paymentorder.FieldCryptoAddress, v)
+	return u
+}
+
+// UpdateCryptoAddress sets the "crypto_address" field to the value that was provided on create.
+func (u *PaymentOrderUpsert) UpdateCryptoAddress() *PaymentOrderUpsert {
+	u.SetExcluded(paymentorder.FieldCryptoAddress)
+	return u
+}
+
+// ClearCryptoAddress clears the value of the "crypto_address" field.
+func (u *PaymentOrderUpsert) ClearCryptoAddress() *PaymentOrderUpsert {
+	u.SetNull(paymentorder.FieldCryptoAddress)
+	return u
+}
+
+// SetCryptoTxHash sets the "crypto_tx_hash" field.
+func (u *PaymentOrderUpsert) SetCryptoTxHash(v string) *PaymentOrderUpsert {
+	u.Set(paymentorder.FieldCryptoTxHash, v)
+	return u
+}
+
+// UpdateCryptoTxHash sets the "crypto_tx_hash" field to the value that was provided on create.
+func (u *PaymentOrderUpsert) UpdateCryptoTxHash() *PaymentOrderUpsert {
+	u.SetExcluded(paymentorder.FieldCryptoTxHash)
+	return u
+}
+
+// ClearCryptoTxHash clears the value of the "crypto_tx_hash" field.
+func (u *PaymentOrderUpsert) ClearCryptoTxHash() *PaymentOrderUpsert {
+	u.SetNull(paymentorder.FieldCryptoTxHash)
+	return u
+}
+
+// SetCryptoConfirmations sets the "crypto_confirmations" field.
+func (u *PaymentOrderUpsert) SetCryptoConfirmations(v int) *PaymentOrderUpsert {
+	u.Set(paymentorder.FieldCryptoConfirmations, v)
+	return u
+}
+
+// UpdateCryptoConfirmations sets the "crypto_confirmations" field to the value that was provided on create.
+func (u *PaymentOrderUpsert) UpdateCryptoConfirmations() *PaymentOrderUpsert {
+	u.SetExcluded(paymentorder.FieldCryptoConfirmations)
+	return u
+}
+
+// AddCryptoConfirmations adds v to the "crypto_confirmations" field.
+func (u *PaymentOrderUpsert) AddCryptoConfirmations(v int) *PaymentOrderUpsert {
+	u.Add(paymentorder.FieldCryptoConfirmations, v)
+	return u
+}
+
+// ClearCryptoConfirmations clears the value of the "crypto_confirmations" field.
+func (u *PaymentOrderUpsert) ClearCryptoConfirmations() *PaymentOrderUpsert {
+	u.SetNull(paymentorder.FieldCryptoConfirmations)
+	return u
+}
+
+// SetCryptoRequiredConfirmations sets the "crypto_required_confirmations" field.
+func (u *PaymentOrderUpsert) SetCryptoRequiredConfirmations(v int) *PaymentOrderUpsert {
+	u.Set(paymentorder.FieldCryptoRequiredConfirmations, v)
+	return u
+}
+
+// UpdateCryptoRequiredConfirmations sets the "crypto_required_confirmations" field to the value that was provided on create.
+func (u *PaymentOrderUpsert) UpdateCryptoRequiredConfirmations() *PaymentOrderUpsert {
+	u.SetExcluded(paymentorder.FieldCryptoRequiredConfirmations)
+	return u
+}
+
+// AddCryptoRequiredConfirmations adds v to the "crypto_required_confirmations" field.
+func (u *PaymentOrderUpsert) AddCryptoRequiredConfirmations(v int) *PaymentOrderUpsert {
+	u.Add(paymentorder.FieldCryptoRequiredConfirmations, v)
+	return u
+}
+
+// ClearCryptoRequiredConfirmations clears the value of the "crypto_required_confirmations" field.
+func (u *PaymentOrderUpsert) ClearCryptoRequiredConfirmations() *PaymentOrderUpsert {
+	u.SetNull(paymentorder.FieldCryptoRequiredConfirmations)
+	return u
+}
+
+// SetCryptoAmountUsd sets the "crypto_amount_usd" field.
+func (u *PaymentOrderUpsert) SetCryptoAmountUsd(v float64) *PaymentOrderUpsert {
+	u.Set(paymentorder.FieldCryptoAmountUsd, v)
+	return u
+}
+
+// UpdateCryptoAmountUsd sets the "crypto_amount_usd" field to the value that was provided on create.
+func (u *PaymentOrderUpsert) UpdateCryptoAmountUsd() *PaymentOrderUpsert {
+	u.SetExcluded(paymentorder.FieldCryptoAmountUsd)
+	return u
+}
+
+// AddCryptoAmountUsd adds v to the "crypto_amount_usd" field.
+func (u *PaymentOrderUpsert) AddCryptoAmountUsd(v float64) *PaymentOrderUpsert {
+	u.Add(paymentorder.FieldCryptoAmountUsd, v)
+	return u
+}
+
+// ClearCryptoAmountUsd clears the value of the "crypto_amount_usd" field.
+func (u *PaymentOrderUpsert) ClearCryptoAmountUsd() *PaymentOrderUpsert {
+	u.SetNull(paymentorder.FieldCryptoAmountUsd)
 	return u
 }
 
@@ -1988,6 +2282,174 @@ func (u *PaymentOrderUpsertOne) UpdateProviderSnapshot() *PaymentOrderUpsertOne 
 func (u *PaymentOrderUpsertOne) ClearProviderSnapshot() *PaymentOrderUpsertOne {
 	return u.Update(func(s *PaymentOrderUpsert) {
 		s.ClearProviderSnapshot()
+	})
+}
+
+// SetCryptoCurrency sets the "crypto_currency" field.
+func (u *PaymentOrderUpsertOne) SetCryptoCurrency(v string) *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoCurrency(v)
+	})
+}
+
+// UpdateCryptoCurrency sets the "crypto_currency" field to the value that was provided on create.
+func (u *PaymentOrderUpsertOne) UpdateCryptoCurrency() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoCurrency()
+	})
+}
+
+// ClearCryptoCurrency clears the value of the "crypto_currency" field.
+func (u *PaymentOrderUpsertOne) ClearCryptoCurrency() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoCurrency()
+	})
+}
+
+// SetCryptoNetwork sets the "crypto_network" field.
+func (u *PaymentOrderUpsertOne) SetCryptoNetwork(v string) *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoNetwork(v)
+	})
+}
+
+// UpdateCryptoNetwork sets the "crypto_network" field to the value that was provided on create.
+func (u *PaymentOrderUpsertOne) UpdateCryptoNetwork() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoNetwork()
+	})
+}
+
+// ClearCryptoNetwork clears the value of the "crypto_network" field.
+func (u *PaymentOrderUpsertOne) ClearCryptoNetwork() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoNetwork()
+	})
+}
+
+// SetCryptoAddress sets the "crypto_address" field.
+func (u *PaymentOrderUpsertOne) SetCryptoAddress(v string) *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoAddress(v)
+	})
+}
+
+// UpdateCryptoAddress sets the "crypto_address" field to the value that was provided on create.
+func (u *PaymentOrderUpsertOne) UpdateCryptoAddress() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoAddress()
+	})
+}
+
+// ClearCryptoAddress clears the value of the "crypto_address" field.
+func (u *PaymentOrderUpsertOne) ClearCryptoAddress() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoAddress()
+	})
+}
+
+// SetCryptoTxHash sets the "crypto_tx_hash" field.
+func (u *PaymentOrderUpsertOne) SetCryptoTxHash(v string) *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoTxHash(v)
+	})
+}
+
+// UpdateCryptoTxHash sets the "crypto_tx_hash" field to the value that was provided on create.
+func (u *PaymentOrderUpsertOne) UpdateCryptoTxHash() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoTxHash()
+	})
+}
+
+// ClearCryptoTxHash clears the value of the "crypto_tx_hash" field.
+func (u *PaymentOrderUpsertOne) ClearCryptoTxHash() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoTxHash()
+	})
+}
+
+// SetCryptoConfirmations sets the "crypto_confirmations" field.
+func (u *PaymentOrderUpsertOne) SetCryptoConfirmations(v int) *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoConfirmations(v)
+	})
+}
+
+// AddCryptoConfirmations adds v to the "crypto_confirmations" field.
+func (u *PaymentOrderUpsertOne) AddCryptoConfirmations(v int) *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.AddCryptoConfirmations(v)
+	})
+}
+
+// UpdateCryptoConfirmations sets the "crypto_confirmations" field to the value that was provided on create.
+func (u *PaymentOrderUpsertOne) UpdateCryptoConfirmations() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoConfirmations()
+	})
+}
+
+// ClearCryptoConfirmations clears the value of the "crypto_confirmations" field.
+func (u *PaymentOrderUpsertOne) ClearCryptoConfirmations() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoConfirmations()
+	})
+}
+
+// SetCryptoRequiredConfirmations sets the "crypto_required_confirmations" field.
+func (u *PaymentOrderUpsertOne) SetCryptoRequiredConfirmations(v int) *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoRequiredConfirmations(v)
+	})
+}
+
+// AddCryptoRequiredConfirmations adds v to the "crypto_required_confirmations" field.
+func (u *PaymentOrderUpsertOne) AddCryptoRequiredConfirmations(v int) *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.AddCryptoRequiredConfirmations(v)
+	})
+}
+
+// UpdateCryptoRequiredConfirmations sets the "crypto_required_confirmations" field to the value that was provided on create.
+func (u *PaymentOrderUpsertOne) UpdateCryptoRequiredConfirmations() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoRequiredConfirmations()
+	})
+}
+
+// ClearCryptoRequiredConfirmations clears the value of the "crypto_required_confirmations" field.
+func (u *PaymentOrderUpsertOne) ClearCryptoRequiredConfirmations() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoRequiredConfirmations()
+	})
+}
+
+// SetCryptoAmountUsd sets the "crypto_amount_usd" field.
+func (u *PaymentOrderUpsertOne) SetCryptoAmountUsd(v float64) *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoAmountUsd(v)
+	})
+}
+
+// AddCryptoAmountUsd adds v to the "crypto_amount_usd" field.
+func (u *PaymentOrderUpsertOne) AddCryptoAmountUsd(v float64) *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.AddCryptoAmountUsd(v)
+	})
+}
+
+// UpdateCryptoAmountUsd sets the "crypto_amount_usd" field to the value that was provided on create.
+func (u *PaymentOrderUpsertOne) UpdateCryptoAmountUsd() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoAmountUsd()
+	})
+}
+
+// ClearCryptoAmountUsd clears the value of the "crypto_amount_usd" field.
+func (u *PaymentOrderUpsertOne) ClearCryptoAmountUsd() *PaymentOrderUpsertOne {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoAmountUsd()
 	})
 }
 
@@ -2920,6 +3382,174 @@ func (u *PaymentOrderUpsertBulk) UpdateProviderSnapshot() *PaymentOrderUpsertBul
 func (u *PaymentOrderUpsertBulk) ClearProviderSnapshot() *PaymentOrderUpsertBulk {
 	return u.Update(func(s *PaymentOrderUpsert) {
 		s.ClearProviderSnapshot()
+	})
+}
+
+// SetCryptoCurrency sets the "crypto_currency" field.
+func (u *PaymentOrderUpsertBulk) SetCryptoCurrency(v string) *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoCurrency(v)
+	})
+}
+
+// UpdateCryptoCurrency sets the "crypto_currency" field to the value that was provided on create.
+func (u *PaymentOrderUpsertBulk) UpdateCryptoCurrency() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoCurrency()
+	})
+}
+
+// ClearCryptoCurrency clears the value of the "crypto_currency" field.
+func (u *PaymentOrderUpsertBulk) ClearCryptoCurrency() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoCurrency()
+	})
+}
+
+// SetCryptoNetwork sets the "crypto_network" field.
+func (u *PaymentOrderUpsertBulk) SetCryptoNetwork(v string) *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoNetwork(v)
+	})
+}
+
+// UpdateCryptoNetwork sets the "crypto_network" field to the value that was provided on create.
+func (u *PaymentOrderUpsertBulk) UpdateCryptoNetwork() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoNetwork()
+	})
+}
+
+// ClearCryptoNetwork clears the value of the "crypto_network" field.
+func (u *PaymentOrderUpsertBulk) ClearCryptoNetwork() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoNetwork()
+	})
+}
+
+// SetCryptoAddress sets the "crypto_address" field.
+func (u *PaymentOrderUpsertBulk) SetCryptoAddress(v string) *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoAddress(v)
+	})
+}
+
+// UpdateCryptoAddress sets the "crypto_address" field to the value that was provided on create.
+func (u *PaymentOrderUpsertBulk) UpdateCryptoAddress() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoAddress()
+	})
+}
+
+// ClearCryptoAddress clears the value of the "crypto_address" field.
+func (u *PaymentOrderUpsertBulk) ClearCryptoAddress() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoAddress()
+	})
+}
+
+// SetCryptoTxHash sets the "crypto_tx_hash" field.
+func (u *PaymentOrderUpsertBulk) SetCryptoTxHash(v string) *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoTxHash(v)
+	})
+}
+
+// UpdateCryptoTxHash sets the "crypto_tx_hash" field to the value that was provided on create.
+func (u *PaymentOrderUpsertBulk) UpdateCryptoTxHash() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoTxHash()
+	})
+}
+
+// ClearCryptoTxHash clears the value of the "crypto_tx_hash" field.
+func (u *PaymentOrderUpsertBulk) ClearCryptoTxHash() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoTxHash()
+	})
+}
+
+// SetCryptoConfirmations sets the "crypto_confirmations" field.
+func (u *PaymentOrderUpsertBulk) SetCryptoConfirmations(v int) *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoConfirmations(v)
+	})
+}
+
+// AddCryptoConfirmations adds v to the "crypto_confirmations" field.
+func (u *PaymentOrderUpsertBulk) AddCryptoConfirmations(v int) *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.AddCryptoConfirmations(v)
+	})
+}
+
+// UpdateCryptoConfirmations sets the "crypto_confirmations" field to the value that was provided on create.
+func (u *PaymentOrderUpsertBulk) UpdateCryptoConfirmations() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoConfirmations()
+	})
+}
+
+// ClearCryptoConfirmations clears the value of the "crypto_confirmations" field.
+func (u *PaymentOrderUpsertBulk) ClearCryptoConfirmations() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoConfirmations()
+	})
+}
+
+// SetCryptoRequiredConfirmations sets the "crypto_required_confirmations" field.
+func (u *PaymentOrderUpsertBulk) SetCryptoRequiredConfirmations(v int) *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoRequiredConfirmations(v)
+	})
+}
+
+// AddCryptoRequiredConfirmations adds v to the "crypto_required_confirmations" field.
+func (u *PaymentOrderUpsertBulk) AddCryptoRequiredConfirmations(v int) *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.AddCryptoRequiredConfirmations(v)
+	})
+}
+
+// UpdateCryptoRequiredConfirmations sets the "crypto_required_confirmations" field to the value that was provided on create.
+func (u *PaymentOrderUpsertBulk) UpdateCryptoRequiredConfirmations() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoRequiredConfirmations()
+	})
+}
+
+// ClearCryptoRequiredConfirmations clears the value of the "crypto_required_confirmations" field.
+func (u *PaymentOrderUpsertBulk) ClearCryptoRequiredConfirmations() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoRequiredConfirmations()
+	})
+}
+
+// SetCryptoAmountUsd sets the "crypto_amount_usd" field.
+func (u *PaymentOrderUpsertBulk) SetCryptoAmountUsd(v float64) *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.SetCryptoAmountUsd(v)
+	})
+}
+
+// AddCryptoAmountUsd adds v to the "crypto_amount_usd" field.
+func (u *PaymentOrderUpsertBulk) AddCryptoAmountUsd(v float64) *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.AddCryptoAmountUsd(v)
+	})
+}
+
+// UpdateCryptoAmountUsd sets the "crypto_amount_usd" field to the value that was provided on create.
+func (u *PaymentOrderUpsertBulk) UpdateCryptoAmountUsd() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.UpdateCryptoAmountUsd()
+	})
+}
+
+// ClearCryptoAmountUsd clears the value of the "crypto_amount_usd" field.
+func (u *PaymentOrderUpsertBulk) ClearCryptoAmountUsd() *PaymentOrderUpsertBulk {
+	return u.Update(func(s *PaymentOrderUpsert) {
+		s.ClearCryptoAmountUsd()
 	})
 }
 

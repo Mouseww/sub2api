@@ -709,6 +709,7 @@ const paymentButtonClass = computed(() => {
   if (isBuiltInWxpayMethod(m)) return 'btn-wxpay'
   if (m === 'stripe') return 'btn-stripe'
   if (m === 'airwallex') return 'btn-airwallex'
+  if (m === 'usdt') return 'btn-usdt'
   return 'btn-primary'
 })
 
@@ -822,6 +823,14 @@ async function createOrder(orderAmount: number, orderType: OrderType, planId?: n
         },
       }).href
       : ''
+    const usdtRouteUrl = visibleMethod === 'usdt'
+      ? router.resolve({
+        path: '/payment/usdt',
+        query: {
+          order_id: String(result.order_id),
+        },
+      }).href
+      : ''
     const decision = decidePaymentLaunch(result, {
       visibleMethod,
       orderType,
@@ -863,6 +872,10 @@ async function createOrder(orderAmount: number, orderType: OrderType, planId?: n
     }
     if (decision.kind === 'airwallex_route') {
       window.location.href = decision.paymentState.payUrl
+      return
+    }
+    if (visibleMethod === 'usdt' && usdtRouteUrl) {
+      window.location.href = usdtRouteUrl
       return
     }
     if (decision.kind === 'wechat_jsapi' && decision.jsapi) {

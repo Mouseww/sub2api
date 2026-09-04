@@ -1,0 +1,303 @@
+{
+  "name": "usdt-recharge",
+  "id": "usdt-recharge",
+  "description": "为 sub2api 对接 USDT 加密货币充值，包含用户充值 UI 与管理员配置 UI。必须复用现有内置支付插件架构（EasyPay / Alipay / Wxpay / Stripe / Airwallex、订单状态机、余额入账、webhook），把 USDT 做成一等支付方式，而不是旁路系统。",
+  "captainSessionId": "session-eb5a3ba8-7c23-48a1-a169-31659489e188",
+  "createdAt": 1788428043157,
+  "members": [
+    {
+      "id": "3a51b9d0-4299-4d60-9260-b503cd39b64f",
+      "name": "researcher",
+      "role": "researcher",
+      "provider": "router-chat",
+      "model": "grok-4.6",
+      "executionPrompt": "你是 sub2api USDT 充值需求研究员。先读 docs/PAYMENT.md、docs/PAYMENT_CN.md、backend/internal/payment/、backend/internal/service/payment_*.go、backend/internal/handler/payment_handler.go、frontend/src/components/payment/、frontend/src/views/user/PaymentView.vue。现有支付已支持 EasyPay 自定义方法（含 usdt_trc20 测试），但前台 METHOD_ORDER / 图标 / 可见方式路由只覆盖支付宝/微信/Stripe/Airwallex。产出一份锁定决策的需求：USDT 作为一等可见支付方式；默认优先把 EasyPay customMethods 的 USDT 提升为一等公民并补加密货币结账 UI；仅当 EasyPay 无法返回链上地址/金额 QR 时才新增 native on-chain provider。禁止另起一套余额系统。验收必须可测试。写清 API 契约、订单字段、网络（TRC20/ERC20 等）、金额精度、超时、幂等入账、管理员配置。把结论写入可交付文档。",
+      "joinedAt": 1788428058376,
+      "status": "idle"
+    },
+    {
+      "id": "bcf16838-18a5-4dbc-881c-370e1c3aad88",
+      "name": "engineer",
+      "role": "engineer",
+      "provider": "router-chat",
+      "model": "grok-4.6",
+      "executionPrompt": "你是 sub2api 后端工程师。只实现 researcher 锁定的 USDT 充值后端：扩展 payment.PaymentType、Registry/Factory、EasyPay 或新 provider、可见方式路由、订单创建/查询/webhook、余额入账幂等、管理员配置。遵循现有 payment.Provider 接口、ent PaymentOrder、PaymentConfigService、wire。金额用现有 decimal 精度，密钥走现有加密。补 Go 单测。不要改无关网关计费。完成后按任务合同填写 changedPaths 与 verify 证据。",
+      "joinedAt": 1788428058404,
+      "status": "idle"
+    },
+    {
+      "id": "83129904-cf24-4f8e-bcde-2a256c890695",
+      "name": "frontend",
+      "role": "frontend",
+      "provider": "router-chat",
+      "model": "grok-4.6",
+      "executionPrompt": "你是 sub2api 前端工程师。实现用户 USDT 充值 UI 和管理员配置 UI，匹配现有 Vue3 + Tailwind 支付页风格，但 USDT 必须有独立图标、网络标识、地址 QR、复制地址/金额、倒计时与轮询状态。复用 PaymentMethodSelector、PaymentStatusPanel、PaymentQRDialog、PaymentView、PaymentProviderDialog。补 i18n（至少 zh/en）。写 vitest。不要引入新的支付框架。视觉上要像加密货币结账，而不是再贴一个灰色通用按钮。",
+      "joinedAt": 1788428058427,
+      "status": "idle"
+    },
+    {
+      "id": "ce3313a3-f8a9-43d0-9e59-f4cd6597a7b1",
+      "name": "reviewer",
+      "role": "reviewer",
+      "provider": "router-chat",
+      "model": "grok-4.6",
+      "executionPrompt": "你是 sub2api 支付改动审查员。只审查最新实现是否满足需求合同：USDT 是否成为一等支付方式、是否复用现有订单/入账、UI 是否完整、测试是否覆盖关键路径、有无密钥泄露或双花/重复入账风险。不要自己改代码。verdict=pass 才能完成；needs_revision/reject 必须带 findings（id/severity/problem/requiredFix）。",
+      "joinedAt": 1788428058449,
+      "status": "idle"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "subject": "锁定 USDT 充值需求与 API 契约",
+      "description": "调研现有支付插件后锁定 USDT 充值需求。\n\n必读：\n- docs/PAYMENT.md、docs/PAYMENT_CN.md\n- backend/internal/payment/types.go、registry.go、provider/factory.go、provider/easypay.go（已有 customMethods / usdt_trc20 测试）\n- backend/internal/service/payment_service.go、payment_config_service.go、payment_resume_service.go、payment_order.go\n- backend/internal/handler/payment_handler.go\n- frontend/src/components/payment/providerConfig.ts、PaymentMethodSelector.vue、paymentFlow.ts、PaymentStatusPanel.vue、PaymentProviderDialog.vue\n- frontend/src/views/user/PaymentView.vue\n- frontend/src/api/admin/settings.ts 的 PaymentVisibleMethod\n\n约束：\n- 前台目前只把 alipay/wxpay/stripe/airwallex 当一等按钮；EasyPay 自定义 USDT 只会落到通用图标。\n- 必须复用 PENDING→PAID→RECHARGING→COMPLETED 订单状态机和现有余额入账。\n- 默认推荐：把 EasyPay USDT（type 如 usdt / usdt_trc20）升格为一等可见方式，并做加密货币专用结账 UI（网络、地址、QR、复制、超时轮询）。\n- 仅当聚合器不能给出可展示的链上地址/应付金额时，才设计 native on-chain provider（管理员配置地址、金额唯一匹配、轮询/webhook）。\n- 产出写入 docs/superpowers/plans/2026-03-26-usdt-recharge.md，包含 API 契约、字段、验收用例。\n- 完成时 verdict=pass，并列出后续 implementation 的 inScope 路径。",
+      "status": "claimed",
+      "assignee": "researcher",
+      "dependencies": [],
+      "attempt": 1,
+      "createdAt": 1788428073487,
+      "updatedAt": 1788446778800,
+      "kind": "requirements",
+      "round": 1,
+      "objective": "锁定 sub2api 的 USDT 加密货币充值方案：作为现有内置支付系统的一等可见支付方式，包含用户结账 UI 与管理员配置，并给出可实施的 API/数据/测试契约。",
+      "acceptance": [
+        "明确 USDT 接入路径（默认：EasyPay customMethods 升格为一等公民 + 加密货币结账 UI；仅当无法返回链上地址/金额 QR 时才新增 native provider）",
+        "写出用户流程：选 USDT → 选网络（如 TRC20/ERC20）→ 展示收款地址 QR/复制 → 链上或聚合器确认 → 幂等入账余额",
+        "写出管理员流程：启用 USDT、配置来源/网络/限额/超时、不暴露密钥",
+        "列出精确文件与接口契约（PaymentType、visible method、create/query/webhook、前端组件）",
+        "声明非目标：不另建余额账本、不做提现、不改网关计费"
+      ],
+      "deliverables": [
+        "docs/superpowers/plans/2026-03-26-usdt-recharge.md"
+      ],
+      "nonGoals": [
+        "加密货币提现",
+        "替换现有支付宝/微信/Stripe/Airwallex",
+        "改动网关 token 计费",
+        "另起独立钱包账本"
+      ],
+      "coverageOf": [
+        "USDT 加密货币充值",
+        "用户充值 UI",
+        "管理员配置 UI",
+        "复用现有支付插件与余额入账"
+      ],
+      "attemptId": "4cdb682e-1344-4bdf-a600-6ad5cd7956a2",
+      "reassigning": false
+    },
+    {
+      "id": "t2",
+      "subject": "实现 USDT 支付后端",
+      "description": "依赖 t1 锁定的契约实现后端。\n\n实现要点：\n- 扩展 backend/internal/payment/types.go 的 PaymentType 与 GetBasePaymentType，避免把 usdt_trc20 误归一成别的方法。\n- 若走 EasyPay：在 easypay.go 把 USDT 自定义方法作为一等可见类型暴露，create/query/webhook 透出网络、地址/QR、应付金额。\n- 若 t1 要求 native provider：新增 provider 文件、factory/registry/wire、webhook 路径、管理员配置字段（网络、收款地址、加密存储）。\n- 接入 PaymentConfigService / visible method routing，让 enabled_payment_types 能返回 usdt。\n- 入账必须走现有 PaymentService 完成订单逻辑，保证幂等。\n- 单测覆盖：类型归一、可见方式、创建订单字段、重复 webhook 不加款、非法网络拒绝。\n- 按合同 verify 在 backend 目录跑测试，并填写 commandsRun/changedPaths。",
+      "status": "pending",
+      "assignee": "engineer",
+      "dependencies": [
+        "t1"
+      ],
+      "attempt": 0,
+      "createdAt": 1788428091072,
+      "updatedAt": 1788428091072,
+      "kind": "implementation",
+      "objective": "按已锁定需求，在现有 payment Provider / 订单 / 配置 / webhook 链路上实现 USDT 充值后端，使前台能创建、查询并完成 USDT 余额充值订单。",
+      "inScope": [
+        "backend/internal/payment/",
+        "backend/internal/payment/provider/",
+        "backend/internal/service/payment_service.go",
+        "backend/internal/service/payment_config_service.go",
+        "backend/internal/service/payment_resume_service.go",
+        "backend/internal/service/payment_order.go",
+        "backend/internal/handler/payment_handler.go",
+        "backend/internal/handler/admin/setting_handler.go",
+        "backend/internal/handler/admin/setting_handler_update.go",
+        "backend/internal/handler/dto/settings.go",
+        "backend/cmd/server/wire.go",
+        "backend/cmd/server/wire_gen.go",
+        "docs/PAYMENT.md",
+        "docs/PAYMENT_CN.md"
+      ],
+      "outOfScope": [
+        "frontend/",
+        "backend/internal/service/gateway*.go",
+        "backend/internal/service/billing*.go"
+      ],
+      "acceptance": [
+        "USDT 成为后端一等 PaymentType/可见方式，而不是仅靠未文档化的 customMethods 字符串",
+        "创建订单返回加密货币结账所需字段（网络、地址或 QR、应付金额、超时）",
+        "webhook/查询确认支付后幂等入账用户余额，重复回调不重复加款",
+        "管理员可配置并启停 USDT 来源；密钥不进日志/普通 API 响应",
+        "现有支付宝/微信/Stripe/Airwallex 路径保持可用"
+      ],
+      "verify": [
+        "go test -tags=unit ./internal/payment/... ./internal/payment/provider/ -count=1",
+        "go test -tags=unit ./internal/service/ ./internal/handler/ -count=1"
+      ],
+      "deliverables": [
+        "USDT provider/visible-method backend",
+        "payment unit tests"
+      ],
+      "nonGoals": [
+        "实现前端 UI",
+        "加密货币提现",
+        "改网关计费"
+      ],
+      "coverageOf": [
+        "USDT 加密货币充值",
+        "复用现有支付插件与余额入账"
+      ]
+    },
+    {
+      "id": "t3",
+      "subject": "实现 USDT 充值与管理 UI",
+      "description": "按 t1 契约与 t2 实际 API 实现前端。\n\n必改：\n- providerConfig.ts：METHOD_ORDER、图标、USDT 类型识别\n- PaymentMethodSelector.vue：USDT 图标与选中色（Tether 绿）\n- paymentFlow.ts：USDT 走 qr_waiting 或专用 crypto_qr，不要误归一成 alipay/wxpay\n- PaymentStatusPanel / PaymentQRDialog：展示链网络、地址、应付金额、复制按钮\n- PaymentView.vue：方法选择、创建订单、轮询\n- PaymentProviderDialog.vue：管理员配置 EasyPay USDT 预设或 native 网络地址\n- Settings 可见方式：如需求要求，增加 USDT 启停\n- i18n zh/en\n- 增加 USDT 图标资源\n- vitest：选择器展示 USDT、结账字段渲染、visible method 归一\n\n遵循 frontend-design：加密货币结账要有明确视觉（网络徽章、等宽地址、QR），但必须融入现有支付页 Tailwind 体系，不要另起一套设计系统。",
+      "status": "pending",
+      "assignee": "frontend",
+      "dependencies": [
+        "t1",
+        "t2"
+      ],
+      "attempt": 0,
+      "createdAt": 1788428105334,
+      "updatedAt": 1788428105334,
+      "kind": "implementation",
+      "objective": "在用户充值页和管理员支付设置中提供完整 USDT 加密货币充值 UI：独立支付按钮、网络/地址 QR/复制、状态轮询，以及管理员启停与配置。",
+      "inScope": [
+        "frontend/src/components/payment/",
+        "frontend/src/views/user/PaymentView.vue",
+        "frontend/src/views/user/PaymentQRCodeView.vue",
+        "frontend/src/views/user/PaymentResultView.vue",
+        "frontend/src/views/admin/SettingsView.vue",
+        "frontend/src/api/admin/settings.ts",
+        "frontend/src/api/admin/payment.ts",
+        "frontend/src/types/payment.ts",
+        "frontend/src/i18n/",
+        "frontend/src/assets/icons/"
+      ],
+      "outOfScope": [
+        "backend/"
+      ],
+      "acceptance": [
+        "用户充值页出现一等 USDT 按钮（独立图标与文案，不是灰色通用 fallback）",
+        "结账 UI 展示网络、收款地址、QR、复制地址/金额、倒计时和支付状态",
+        "管理员可启停 USDT 并配置来源/网络，交互与现有 Provider 对话框一致",
+        "zh/en i18n 完整",
+        "现有支付宝/微信/Stripe/Airwallex UI 不回归"
+      ],
+      "verify": [
+        "pnpm --dir frontend exec vitest run src/components/payment src/views/user/__tests__/PaymentView.spec.ts src/views/user/__tests__/PaymentResultView.spec.ts src/api/__tests__/settings.paymentVisibleMethods.spec.ts"
+      ],
+      "deliverables": [
+        "USDT user checkout UI",
+        "USDT admin settings UI",
+        "vitest coverage"
+      ],
+      "nonGoals": [
+        "重做整个支付页视觉",
+        "引入新支付 SDK"
+      ],
+      "coverageOf": [
+        "用户充值 UI",
+        "管理员配置 UI"
+      ]
+    },
+    {
+      "id": "t4",
+      "subject": "验证 USDT 充值前后端契约",
+      "description": "在 t2/t3 完成后运行合同中的验证命令，并补充阅读测试与关键路径代码。\n\n命令（在对应目录）：\n1. 在 backend：go test -tags=unit ./internal/payment/... ./internal/payment/provider/ -count=1\n2. 在 backend：go test -tags=unit ./internal/service/ ./internal/handler/ -count=1\n3. 在仓库根：pnpm --dir frontend exec vitest run src/components/payment src/views/user/__tests__/PaymentView.spec.ts src/views/user/__tests__/PaymentResultView.spec.ts src/api/__tests__/settings.paymentVisibleMethods.spec.ts\n\n检查点：\n- USDT 类型不会被 GetBasePaymentType / normalizeVisibleMethod 吞掉\n- 订单创建响应含 UI 所需字段\n- webhook/query 完成路径幂等\n- 前端有 USDT 按钮、QR/地址/复制\n- 支付宝/微信/Stripe 既有测试仍绿\n\n把命令输出摘要写入任务 output。不要改产品代码；失败则让任务 failed 并写清失败点。",
+      "status": "pending",
+      "assignee": "engineer",
+      "dependencies": [
+        "t2",
+        "t3"
+      ],
+      "attempt": 0,
+      "createdAt": 1788428131693,
+      "updatedAt": 1788428131693,
+      "kind": "verification",
+      "objective": "用仓库现有测试命令验证 USDT 充值后端与前端：创建/查询/入账幂等、可见方式、UI 选择器与结账字段，且不破坏原有支付测试。",
+      "acceptance": [
+        "backend payment/provider 单测通过",
+        "payment service/handler 相关单测通过",
+        "前端 payment 关键 vitest 通过",
+        "有证据证明重复支付确认不会重复加款",
+        "有证据证明 USDT 在用户方法列表中作为独立方式出现"
+      ],
+      "deliverables": [
+        "verification evidence"
+      ],
+      "coverageOf": [
+        "USDT 加密货币充值",
+        "用户充值 UI"
+      ]
+    },
+    {
+      "id": "t5",
+      "subject": "审查 USDT 充值实现",
+      "description": "审查对象是最新实现整体，以 t3 为 reviewedTaskId，但必须同时阅读 t2 后端改动与 t1 需求。\n\n审查清单：\n- 需求覆盖：用户能用 USDT 充值并看到完整加密货币 UI\n- 架构：走 payment.Provider，不旁路入账\n- 安全：商户密钥/私钥加密存储，日志无密钥，webhook 验签\n- 资金：同一 out_trade_no / txid 不重复加款；金额/网络校验\n- UI：独立 USDT 入口，地址可复制，状态可轮询\n- 回归：原有支付方式仍可用\n- 测试：t4 验证证据充分\n\n不要修改代码。pass 才能 completed。",
+      "status": "pending",
+      "assignee": "reviewer",
+      "dependencies": [
+        "t4"
+      ],
+      "attempt": 0,
+      "createdAt": 1788428131712,
+      "updatedAt": 1788428131712,
+      "kind": "review",
+      "round": 1,
+      "objective": "审查最新 USDT 充值实现（后端 t2 + 前端 t3）是否满足需求契约，重点检查入账幂等、密钥处理、一等支付方式与 UI 完整性。",
+      "acceptance": [
+        "确认 USDT 是一等支付方式且复用现有订单/余额入账",
+        "确认用户 UI 含网络/地址/QR/复制/状态，管理员可配置",
+        "确认无重复入账、无密钥泄露、无破坏现有支付方式"
+      ],
+      "deliverables": [
+        "review verdict"
+      ],
+      "reviewedTaskId": "t3",
+      "coverageOf": [
+        "USDT 加密货币充值",
+        "用户充值 UI",
+        "管理员配置 UI"
+      ]
+    },
+    {
+      "id": "t6",
+      "subject": "收口文档与支付配置说明",
+      "description": "t5 审查通过后做文档收口。更新支付文档的 Supported Payment Methods、Provider Configuration、Webhook、Payment Flow，增加 USDT 一节（网络、回调 URL、EasyPay customMethods 或 native 配置、用户扫码/转账步骤）。README 若已列举内置支付方式则补上 USDT。不要扩大范围到提现或新链。",
+      "status": "pending",
+      "assignee": "engineer",
+      "dependencies": [
+        "t5"
+      ],
+      "attempt": 0,
+      "createdAt": 1788428131731,
+      "updatedAt": 1788428131731,
+      "kind": "integration",
+      "objective": "在审查通过后，把 USDT 充值接入说明并入支付文档与用户/管理员文案，确保部署者能按文档启用 USDT。",
+      "inScope": [
+        "docs/PAYMENT.md",
+        "docs/PAYMENT_CN.md",
+        "frontend/src/i18n/",
+        "README.md",
+        "README_CN.md"
+      ],
+      "outOfScope": [
+        "backend/internal/service/gateway*.go"
+      ],
+      "acceptance": [
+        "docs/PAYMENT.md 与 docs/PAYMENT_CN.md 包含 USDT 配置、回调、用户流程",
+        "管理员/用户 i18n 关键文案齐全",
+        "说明与实现一致，不承诺未实现的链或提现"
+      ],
+      "deliverables": [
+        "updated payment docs"
+      ],
+      "coverageOf": [
+        "USDT 加密货币充值",
+        "管理员配置 UI"
+      ]
+    }
+  ],
+  "taskSeq": 6,
+  "phase": "running",
+  "approvedAt": 1788446775278
+}

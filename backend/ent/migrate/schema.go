@@ -863,6 +863,54 @@ var (
 			},
 		},
 	}
+	// CryptoDepositAddressesColumns holds the columns for the "crypto_deposit_addresses" table.
+	CryptoDepositAddressesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "currency", Type: field.TypeString, Size: 20},
+		{Name: "network", Type: field.TypeString, Size: 20},
+		{Name: "address", Type: field.TypeString, Size: 128},
+		{Name: "provider_instance_id", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "status", Type: field.TypeString, Size: 30, Default: "active"},
+		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamptz"}},
+		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamptz"}},
+		{Name: "user_id", Type: field.TypeInt64},
+	}
+	// CryptoDepositAddressesTable holds the schema information for the "crypto_deposit_addresses" table.
+	CryptoDepositAddressesTable = &schema.Table{
+		Name:       "crypto_deposit_addresses",
+		Columns:    CryptoDepositAddressesColumns,
+		PrimaryKey: []*schema.Column{CryptoDepositAddressesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "crypto_deposit_addresses_users_crypto_deposit_addresses",
+				Columns:    []*schema.Column{CryptoDepositAddressesColumns[8]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "cryptodepositaddress_user_id_currency_network",
+				Unique:  true,
+				Columns: []*schema.Column{CryptoDepositAddressesColumns[8], CryptoDepositAddressesColumns[1], CryptoDepositAddressesColumns[2]},
+			},
+			{
+				Name:    "cryptodepositaddress_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{CryptoDepositAddressesColumns[8]},
+			},
+			{
+				Name:    "cryptodepositaddress_address",
+				Unique:  false,
+				Columns: []*schema.Column{CryptoDepositAddressesColumns[3]},
+			},
+			{
+				Name:    "cryptodepositaddress_status",
+				Unique:  false,
+				Columns: []*schema.Column{CryptoDepositAddressesColumns[5]},
+			},
+		},
+	}
 	// ErrorPassthroughRulesColumns holds the columns for the "error_passthrough_rules" table.
 	ErrorPassthroughRulesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -1141,6 +1189,13 @@ var (
 		{Name: "provider_instance_id", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "provider_key", Type: field.TypeString, Nullable: true, Size: 30},
 		{Name: "provider_snapshot", Type: field.TypeJSON, Nullable: true, SchemaType: map[string]string{"postgres": "jsonb"}},
+		{Name: "crypto_currency", Type: field.TypeString, Nullable: true, Size: 20},
+		{Name: "crypto_network", Type: field.TypeString, Nullable: true, Size: 20},
+		{Name: "crypto_address", Type: field.TypeString, Nullable: true, Size: 128},
+		{Name: "crypto_tx_hash", Type: field.TypeString, Nullable: true, Size: 128},
+		{Name: "crypto_confirmations", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "crypto_required_confirmations", Type: field.TypeInt, Nullable: true},
+		{Name: "crypto_amount_usd", Type: field.TypeFloat64, Nullable: true, SchemaType: map[string]string{"postgres": "decimal(20,2)"}},
 		{Name: "status", Type: field.TypeString, Size: 30, Default: "PENDING"},
 		{Name: "refund_amount", Type: field.TypeFloat64, Default: 0, SchemaType: map[string]string{"postgres": "decimal(20,2)"}},
 		{Name: "refund_reason", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"postgres": "text"}},
@@ -1169,7 +1224,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "payment_orders_users_payment_orders",
-				Columns:    []*schema.Column{PaymentOrdersColumns[39]},
+				Columns:    []*schema.Column{PaymentOrdersColumns[46]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -1186,37 +1241,47 @@ var (
 			{
 				Name:    "paymentorder_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{PaymentOrdersColumns[39]},
+				Columns: []*schema.Column{PaymentOrdersColumns[46]},
 			},
 			{
 				Name:    "paymentorder_status",
 				Unique:  false,
-				Columns: []*schema.Column{PaymentOrdersColumns[21]},
+				Columns: []*schema.Column{PaymentOrdersColumns[28]},
 			},
 			{
 				Name:    "paymentorder_expires_at",
 				Unique:  false,
-				Columns: []*schema.Column{PaymentOrdersColumns[29]},
+				Columns: []*schema.Column{PaymentOrdersColumns[36]},
 			},
 			{
 				Name:    "paymentorder_created_at",
 				Unique:  false,
-				Columns: []*schema.Column{PaymentOrdersColumns[37]},
+				Columns: []*schema.Column{PaymentOrdersColumns[44]},
 			},
 			{
 				Name:    "paymentorder_paid_at",
 				Unique:  false,
-				Columns: []*schema.Column{PaymentOrdersColumns[30]},
+				Columns: []*schema.Column{PaymentOrdersColumns[37]},
 			},
 			{
 				Name:    "paymentorder_payment_type_paid_at",
 				Unique:  false,
-				Columns: []*schema.Column{PaymentOrdersColumns[9], PaymentOrdersColumns[30]},
+				Columns: []*schema.Column{PaymentOrdersColumns[9], PaymentOrdersColumns[37]},
 			},
 			{
 				Name:    "paymentorder_order_type",
 				Unique:  false,
 				Columns: []*schema.Column{PaymentOrdersColumns[14]},
+			},
+			{
+				Name:    "paymentorder_crypto_tx_hash",
+				Unique:  false,
+				Columns: []*schema.Column{PaymentOrdersColumns[24]},
+			},
+			{
+				Name:    "paymentorder_crypto_address",
+				Unique:  false,
+				Columns: []*schema.Column{PaymentOrdersColumns[23]},
 			},
 		},
 	}
@@ -2102,6 +2167,7 @@ var (
 		ChannelMonitorHistoriesTable,
 		ChannelMonitorRequestTemplatesTable,
 		CompositeModelRoutesTable,
+		CryptoDepositAddressesTable,
 		ErrorPassthroughRulesTable,
 		GroupsTable,
 		IdempotencyRecordsTable,
@@ -2188,6 +2254,10 @@ func init() {
 	CompositeModelRoutesTable.ForeignKeys[0].RefTable = GroupsTable
 	CompositeModelRoutesTable.Annotation = &entsql.Annotation{
 		Table: "composite_model_routes",
+	}
+	CryptoDepositAddressesTable.ForeignKeys[0].RefTable = UsersTable
+	CryptoDepositAddressesTable.Annotation = &entsql.Annotation{
+		Table: "crypto_deposit_addresses",
 	}
 	ErrorPassthroughRulesTable.Annotation = &entsql.Annotation{
 		Table: "error_passthrough_rules",

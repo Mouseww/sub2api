@@ -14,6 +14,7 @@ import (
 	"github.com/Wei-Shaw/sub2api/ent/announcementread"
 	"github.com/Wei-Shaw/sub2api/ent/apikey"
 	"github.com/Wei-Shaw/sub2api/ent/authidentity"
+	"github.com/Wei-Shaw/sub2api/ent/cryptodepositaddress"
 	"github.com/Wei-Shaw/sub2api/ent/group"
 	"github.com/Wei-Shaw/sub2api/ent/paymentorder"
 	"github.com/Wei-Shaw/sub2api/ent/pendingauthsession"
@@ -641,6 +642,21 @@ func (_u *UserUpdate) AddPlatformQuotas(v ...*UserPlatformQuota) *UserUpdate {
 	return _u.AddPlatformQuotaIDs(ids...)
 }
 
+// AddCryptoDepositAddressIDs adds the "crypto_deposit_addresses" edge to the CryptoDepositAddress entity by IDs.
+func (_u *UserUpdate) AddCryptoDepositAddressIDs(ids ...int64) *UserUpdate {
+	_u.mutation.AddCryptoDepositAddressIDs(ids...)
+	return _u
+}
+
+// AddCryptoDepositAddresses adds the "crypto_deposit_addresses" edges to the CryptoDepositAddress entity.
+func (_u *UserUpdate) AddCryptoDepositAddresses(v ...*CryptoDepositAddress) *UserUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCryptoDepositAddressIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (_u *UserUpdate) Mutation() *UserMutation {
 	return _u.mutation
@@ -917,6 +933,27 @@ func (_u *UserUpdate) RemovePlatformQuotas(v ...*UserPlatformQuota) *UserUpdate 
 		ids[i] = v[i].ID
 	}
 	return _u.RemovePlatformQuotaIDs(ids...)
+}
+
+// ClearCryptoDepositAddresses clears all "crypto_deposit_addresses" edges to the CryptoDepositAddress entity.
+func (_u *UserUpdate) ClearCryptoDepositAddresses() *UserUpdate {
+	_u.mutation.ClearCryptoDepositAddresses()
+	return _u
+}
+
+// RemoveCryptoDepositAddressIDs removes the "crypto_deposit_addresses" edge to CryptoDepositAddress entities by IDs.
+func (_u *UserUpdate) RemoveCryptoDepositAddressIDs(ids ...int64) *UserUpdate {
+	_u.mutation.RemoveCryptoDepositAddressIDs(ids...)
+	return _u
+}
+
+// RemoveCryptoDepositAddresses removes "crypto_deposit_addresses" edges to CryptoDepositAddress entities.
+func (_u *UserUpdate) RemoveCryptoDepositAddresses(v ...*CryptoDepositAddress) *UserUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCryptoDepositAddressIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1713,6 +1750,51 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CryptoDepositAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CryptoDepositAddressesTable,
+			Columns: []string{user.CryptoDepositAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(cryptodepositaddress.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCryptoDepositAddressesIDs(); len(nodes) > 0 && !_u.mutation.CryptoDepositAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CryptoDepositAddressesTable,
+			Columns: []string{user.CryptoDepositAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(cryptodepositaddress.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CryptoDepositAddressesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CryptoDepositAddressesTable,
+			Columns: []string{user.CryptoDepositAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(cryptodepositaddress.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{user.Label}
@@ -2334,6 +2416,21 @@ func (_u *UserUpdateOne) AddPlatformQuotas(v ...*UserPlatformQuota) *UserUpdateO
 	return _u.AddPlatformQuotaIDs(ids...)
 }
 
+// AddCryptoDepositAddressIDs adds the "crypto_deposit_addresses" edge to the CryptoDepositAddress entity by IDs.
+func (_u *UserUpdateOne) AddCryptoDepositAddressIDs(ids ...int64) *UserUpdateOne {
+	_u.mutation.AddCryptoDepositAddressIDs(ids...)
+	return _u
+}
+
+// AddCryptoDepositAddresses adds the "crypto_deposit_addresses" edges to the CryptoDepositAddress entity.
+func (_u *UserUpdateOne) AddCryptoDepositAddresses(v ...*CryptoDepositAddress) *UserUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCryptoDepositAddressIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (_u *UserUpdateOne) Mutation() *UserMutation {
 	return _u.mutation
@@ -2610,6 +2707,27 @@ func (_u *UserUpdateOne) RemovePlatformQuotas(v ...*UserPlatformQuota) *UserUpda
 		ids[i] = v[i].ID
 	}
 	return _u.RemovePlatformQuotaIDs(ids...)
+}
+
+// ClearCryptoDepositAddresses clears all "crypto_deposit_addresses" edges to the CryptoDepositAddress entity.
+func (_u *UserUpdateOne) ClearCryptoDepositAddresses() *UserUpdateOne {
+	_u.mutation.ClearCryptoDepositAddresses()
+	return _u
+}
+
+// RemoveCryptoDepositAddressIDs removes the "crypto_deposit_addresses" edge to CryptoDepositAddress entities by IDs.
+func (_u *UserUpdateOne) RemoveCryptoDepositAddressIDs(ids ...int64) *UserUpdateOne {
+	_u.mutation.RemoveCryptoDepositAddressIDs(ids...)
+	return _u
+}
+
+// RemoveCryptoDepositAddresses removes "crypto_deposit_addresses" edges to CryptoDepositAddress entities.
+func (_u *UserUpdateOne) RemoveCryptoDepositAddresses(v ...*CryptoDepositAddress) *UserUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCryptoDepositAddressIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -3429,6 +3547,51 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(userplatformquota.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CryptoDepositAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CryptoDepositAddressesTable,
+			Columns: []string{user.CryptoDepositAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(cryptodepositaddress.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCryptoDepositAddressesIDs(); len(nodes) > 0 && !_u.mutation.CryptoDepositAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CryptoDepositAddressesTable,
+			Columns: []string{user.CryptoDepositAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(cryptodepositaddress.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CryptoDepositAddressesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.CryptoDepositAddressesTable,
+			Columns: []string{user.CryptoDepositAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(cryptodepositaddress.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

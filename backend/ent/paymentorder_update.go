@@ -417,6 +417,167 @@ func (_u *PaymentOrderUpdate) ClearProviderSnapshot() *PaymentOrderUpdate {
 	return _u
 }
 
+// SetCryptoCurrency sets the "crypto_currency" field.
+func (_u *PaymentOrderUpdate) SetCryptoCurrency(v string) *PaymentOrderUpdate {
+	_u.mutation.SetCryptoCurrency(v)
+	return _u
+}
+
+// SetNillableCryptoCurrency sets the "crypto_currency" field if the given value is not nil.
+func (_u *PaymentOrderUpdate) SetNillableCryptoCurrency(v *string) *PaymentOrderUpdate {
+	if v != nil {
+		_u.SetCryptoCurrency(*v)
+	}
+	return _u
+}
+
+// ClearCryptoCurrency clears the value of the "crypto_currency" field.
+func (_u *PaymentOrderUpdate) ClearCryptoCurrency() *PaymentOrderUpdate {
+	_u.mutation.ClearCryptoCurrency()
+	return _u
+}
+
+// SetCryptoNetwork sets the "crypto_network" field.
+func (_u *PaymentOrderUpdate) SetCryptoNetwork(v string) *PaymentOrderUpdate {
+	_u.mutation.SetCryptoNetwork(v)
+	return _u
+}
+
+// SetNillableCryptoNetwork sets the "crypto_network" field if the given value is not nil.
+func (_u *PaymentOrderUpdate) SetNillableCryptoNetwork(v *string) *PaymentOrderUpdate {
+	if v != nil {
+		_u.SetCryptoNetwork(*v)
+	}
+	return _u
+}
+
+// ClearCryptoNetwork clears the value of the "crypto_network" field.
+func (_u *PaymentOrderUpdate) ClearCryptoNetwork() *PaymentOrderUpdate {
+	_u.mutation.ClearCryptoNetwork()
+	return _u
+}
+
+// SetCryptoAddress sets the "crypto_address" field.
+func (_u *PaymentOrderUpdate) SetCryptoAddress(v string) *PaymentOrderUpdate {
+	_u.mutation.SetCryptoAddress(v)
+	return _u
+}
+
+// SetNillableCryptoAddress sets the "crypto_address" field if the given value is not nil.
+func (_u *PaymentOrderUpdate) SetNillableCryptoAddress(v *string) *PaymentOrderUpdate {
+	if v != nil {
+		_u.SetCryptoAddress(*v)
+	}
+	return _u
+}
+
+// ClearCryptoAddress clears the value of the "crypto_address" field.
+func (_u *PaymentOrderUpdate) ClearCryptoAddress() *PaymentOrderUpdate {
+	_u.mutation.ClearCryptoAddress()
+	return _u
+}
+
+// SetCryptoTxHash sets the "crypto_tx_hash" field.
+func (_u *PaymentOrderUpdate) SetCryptoTxHash(v string) *PaymentOrderUpdate {
+	_u.mutation.SetCryptoTxHash(v)
+	return _u
+}
+
+// SetNillableCryptoTxHash sets the "crypto_tx_hash" field if the given value is not nil.
+func (_u *PaymentOrderUpdate) SetNillableCryptoTxHash(v *string) *PaymentOrderUpdate {
+	if v != nil {
+		_u.SetCryptoTxHash(*v)
+	}
+	return _u
+}
+
+// ClearCryptoTxHash clears the value of the "crypto_tx_hash" field.
+func (_u *PaymentOrderUpdate) ClearCryptoTxHash() *PaymentOrderUpdate {
+	_u.mutation.ClearCryptoTxHash()
+	return _u
+}
+
+// SetCryptoConfirmations sets the "crypto_confirmations" field.
+func (_u *PaymentOrderUpdate) SetCryptoConfirmations(v int) *PaymentOrderUpdate {
+	_u.mutation.ResetCryptoConfirmations()
+	_u.mutation.SetCryptoConfirmations(v)
+	return _u
+}
+
+// SetNillableCryptoConfirmations sets the "crypto_confirmations" field if the given value is not nil.
+func (_u *PaymentOrderUpdate) SetNillableCryptoConfirmations(v *int) *PaymentOrderUpdate {
+	if v != nil {
+		_u.SetCryptoConfirmations(*v)
+	}
+	return _u
+}
+
+// AddCryptoConfirmations adds value to the "crypto_confirmations" field.
+func (_u *PaymentOrderUpdate) AddCryptoConfirmations(v int) *PaymentOrderUpdate {
+	_u.mutation.AddCryptoConfirmations(v)
+	return _u
+}
+
+// ClearCryptoConfirmations clears the value of the "crypto_confirmations" field.
+func (_u *PaymentOrderUpdate) ClearCryptoConfirmations() *PaymentOrderUpdate {
+	_u.mutation.ClearCryptoConfirmations()
+	return _u
+}
+
+// SetCryptoRequiredConfirmations sets the "crypto_required_confirmations" field.
+func (_u *PaymentOrderUpdate) SetCryptoRequiredConfirmations(v int) *PaymentOrderUpdate {
+	_u.mutation.ResetCryptoRequiredConfirmations()
+	_u.mutation.SetCryptoRequiredConfirmations(v)
+	return _u
+}
+
+// SetNillableCryptoRequiredConfirmations sets the "crypto_required_confirmations" field if the given value is not nil.
+func (_u *PaymentOrderUpdate) SetNillableCryptoRequiredConfirmations(v *int) *PaymentOrderUpdate {
+	if v != nil {
+		_u.SetCryptoRequiredConfirmations(*v)
+	}
+	return _u
+}
+
+// AddCryptoRequiredConfirmations adds value to the "crypto_required_confirmations" field.
+func (_u *PaymentOrderUpdate) AddCryptoRequiredConfirmations(v int) *PaymentOrderUpdate {
+	_u.mutation.AddCryptoRequiredConfirmations(v)
+	return _u
+}
+
+// ClearCryptoRequiredConfirmations clears the value of the "crypto_required_confirmations" field.
+func (_u *PaymentOrderUpdate) ClearCryptoRequiredConfirmations() *PaymentOrderUpdate {
+	_u.mutation.ClearCryptoRequiredConfirmations()
+	return _u
+}
+
+// SetCryptoAmountUsd sets the "crypto_amount_usd" field.
+func (_u *PaymentOrderUpdate) SetCryptoAmountUsd(v float64) *PaymentOrderUpdate {
+	_u.mutation.ResetCryptoAmountUsd()
+	_u.mutation.SetCryptoAmountUsd(v)
+	return _u
+}
+
+// SetNillableCryptoAmountUsd sets the "crypto_amount_usd" field if the given value is not nil.
+func (_u *PaymentOrderUpdate) SetNillableCryptoAmountUsd(v *float64) *PaymentOrderUpdate {
+	if v != nil {
+		_u.SetCryptoAmountUsd(*v)
+	}
+	return _u
+}
+
+// AddCryptoAmountUsd adds value to the "crypto_amount_usd" field.
+func (_u *PaymentOrderUpdate) AddCryptoAmountUsd(v float64) *PaymentOrderUpdate {
+	_u.mutation.AddCryptoAmountUsd(v)
+	return _u
+}
+
+// ClearCryptoAmountUsd clears the value of the "crypto_amount_usd" field.
+func (_u *PaymentOrderUpdate) ClearCryptoAmountUsd() *PaymentOrderUpdate {
+	_u.mutation.ClearCryptoAmountUsd()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *PaymentOrderUpdate) SetStatus(v string) *PaymentOrderUpdate {
 	_u.mutation.SetStatus(v)
@@ -813,6 +974,26 @@ func (_u *PaymentOrderUpdate) check() error {
 			return &ValidationError{Name: "provider_key", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.provider_key": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.CryptoCurrency(); ok {
+		if err := paymentorder.CryptoCurrencyValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_currency", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_currency": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.CryptoNetwork(); ok {
+		if err := paymentorder.CryptoNetworkValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_network", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_network": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.CryptoAddress(); ok {
+		if err := paymentorder.CryptoAddressValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_address", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_address": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.CryptoTxHash(); ok {
+		if err := paymentorder.CryptoTxHashValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_tx_hash", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_tx_hash": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Status(); ok {
 		if err := paymentorder.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.status": %w`, err)}
@@ -958,6 +1139,57 @@ func (_u *PaymentOrderUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.ProviderSnapshotCleared() {
 		_spec.ClearField(paymentorder.FieldProviderSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.CryptoCurrency(); ok {
+		_spec.SetField(paymentorder.FieldCryptoCurrency, field.TypeString, value)
+	}
+	if _u.mutation.CryptoCurrencyCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoCurrency, field.TypeString)
+	}
+	if value, ok := _u.mutation.CryptoNetwork(); ok {
+		_spec.SetField(paymentorder.FieldCryptoNetwork, field.TypeString, value)
+	}
+	if _u.mutation.CryptoNetworkCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoNetwork, field.TypeString)
+	}
+	if value, ok := _u.mutation.CryptoAddress(); ok {
+		_spec.SetField(paymentorder.FieldCryptoAddress, field.TypeString, value)
+	}
+	if _u.mutation.CryptoAddressCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoAddress, field.TypeString)
+	}
+	if value, ok := _u.mutation.CryptoTxHash(); ok {
+		_spec.SetField(paymentorder.FieldCryptoTxHash, field.TypeString, value)
+	}
+	if _u.mutation.CryptoTxHashCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoTxHash, field.TypeString)
+	}
+	if value, ok := _u.mutation.CryptoConfirmations(); ok {
+		_spec.SetField(paymentorder.FieldCryptoConfirmations, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedCryptoConfirmations(); ok {
+		_spec.AddField(paymentorder.FieldCryptoConfirmations, field.TypeInt, value)
+	}
+	if _u.mutation.CryptoConfirmationsCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoConfirmations, field.TypeInt)
+	}
+	if value, ok := _u.mutation.CryptoRequiredConfirmations(); ok {
+		_spec.SetField(paymentorder.FieldCryptoRequiredConfirmations, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedCryptoRequiredConfirmations(); ok {
+		_spec.AddField(paymentorder.FieldCryptoRequiredConfirmations, field.TypeInt, value)
+	}
+	if _u.mutation.CryptoRequiredConfirmationsCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoRequiredConfirmations, field.TypeInt)
+	}
+	if value, ok := _u.mutation.CryptoAmountUsd(); ok {
+		_spec.SetField(paymentorder.FieldCryptoAmountUsd, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedCryptoAmountUsd(); ok {
+		_spec.AddField(paymentorder.FieldCryptoAmountUsd, field.TypeFloat64, value)
+	}
+	if _u.mutation.CryptoAmountUsdCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoAmountUsd, field.TypeFloat64)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(paymentorder.FieldStatus, field.TypeString, value)
@@ -1480,6 +1712,167 @@ func (_u *PaymentOrderUpdateOne) ClearProviderSnapshot() *PaymentOrderUpdateOne 
 	return _u
 }
 
+// SetCryptoCurrency sets the "crypto_currency" field.
+func (_u *PaymentOrderUpdateOne) SetCryptoCurrency(v string) *PaymentOrderUpdateOne {
+	_u.mutation.SetCryptoCurrency(v)
+	return _u
+}
+
+// SetNillableCryptoCurrency sets the "crypto_currency" field if the given value is not nil.
+func (_u *PaymentOrderUpdateOne) SetNillableCryptoCurrency(v *string) *PaymentOrderUpdateOne {
+	if v != nil {
+		_u.SetCryptoCurrency(*v)
+	}
+	return _u
+}
+
+// ClearCryptoCurrency clears the value of the "crypto_currency" field.
+func (_u *PaymentOrderUpdateOne) ClearCryptoCurrency() *PaymentOrderUpdateOne {
+	_u.mutation.ClearCryptoCurrency()
+	return _u
+}
+
+// SetCryptoNetwork sets the "crypto_network" field.
+func (_u *PaymentOrderUpdateOne) SetCryptoNetwork(v string) *PaymentOrderUpdateOne {
+	_u.mutation.SetCryptoNetwork(v)
+	return _u
+}
+
+// SetNillableCryptoNetwork sets the "crypto_network" field if the given value is not nil.
+func (_u *PaymentOrderUpdateOne) SetNillableCryptoNetwork(v *string) *PaymentOrderUpdateOne {
+	if v != nil {
+		_u.SetCryptoNetwork(*v)
+	}
+	return _u
+}
+
+// ClearCryptoNetwork clears the value of the "crypto_network" field.
+func (_u *PaymentOrderUpdateOne) ClearCryptoNetwork() *PaymentOrderUpdateOne {
+	_u.mutation.ClearCryptoNetwork()
+	return _u
+}
+
+// SetCryptoAddress sets the "crypto_address" field.
+func (_u *PaymentOrderUpdateOne) SetCryptoAddress(v string) *PaymentOrderUpdateOne {
+	_u.mutation.SetCryptoAddress(v)
+	return _u
+}
+
+// SetNillableCryptoAddress sets the "crypto_address" field if the given value is not nil.
+func (_u *PaymentOrderUpdateOne) SetNillableCryptoAddress(v *string) *PaymentOrderUpdateOne {
+	if v != nil {
+		_u.SetCryptoAddress(*v)
+	}
+	return _u
+}
+
+// ClearCryptoAddress clears the value of the "crypto_address" field.
+func (_u *PaymentOrderUpdateOne) ClearCryptoAddress() *PaymentOrderUpdateOne {
+	_u.mutation.ClearCryptoAddress()
+	return _u
+}
+
+// SetCryptoTxHash sets the "crypto_tx_hash" field.
+func (_u *PaymentOrderUpdateOne) SetCryptoTxHash(v string) *PaymentOrderUpdateOne {
+	_u.mutation.SetCryptoTxHash(v)
+	return _u
+}
+
+// SetNillableCryptoTxHash sets the "crypto_tx_hash" field if the given value is not nil.
+func (_u *PaymentOrderUpdateOne) SetNillableCryptoTxHash(v *string) *PaymentOrderUpdateOne {
+	if v != nil {
+		_u.SetCryptoTxHash(*v)
+	}
+	return _u
+}
+
+// ClearCryptoTxHash clears the value of the "crypto_tx_hash" field.
+func (_u *PaymentOrderUpdateOne) ClearCryptoTxHash() *PaymentOrderUpdateOne {
+	_u.mutation.ClearCryptoTxHash()
+	return _u
+}
+
+// SetCryptoConfirmations sets the "crypto_confirmations" field.
+func (_u *PaymentOrderUpdateOne) SetCryptoConfirmations(v int) *PaymentOrderUpdateOne {
+	_u.mutation.ResetCryptoConfirmations()
+	_u.mutation.SetCryptoConfirmations(v)
+	return _u
+}
+
+// SetNillableCryptoConfirmations sets the "crypto_confirmations" field if the given value is not nil.
+func (_u *PaymentOrderUpdateOne) SetNillableCryptoConfirmations(v *int) *PaymentOrderUpdateOne {
+	if v != nil {
+		_u.SetCryptoConfirmations(*v)
+	}
+	return _u
+}
+
+// AddCryptoConfirmations adds value to the "crypto_confirmations" field.
+func (_u *PaymentOrderUpdateOne) AddCryptoConfirmations(v int) *PaymentOrderUpdateOne {
+	_u.mutation.AddCryptoConfirmations(v)
+	return _u
+}
+
+// ClearCryptoConfirmations clears the value of the "crypto_confirmations" field.
+func (_u *PaymentOrderUpdateOne) ClearCryptoConfirmations() *PaymentOrderUpdateOne {
+	_u.mutation.ClearCryptoConfirmations()
+	return _u
+}
+
+// SetCryptoRequiredConfirmations sets the "crypto_required_confirmations" field.
+func (_u *PaymentOrderUpdateOne) SetCryptoRequiredConfirmations(v int) *PaymentOrderUpdateOne {
+	_u.mutation.ResetCryptoRequiredConfirmations()
+	_u.mutation.SetCryptoRequiredConfirmations(v)
+	return _u
+}
+
+// SetNillableCryptoRequiredConfirmations sets the "crypto_required_confirmations" field if the given value is not nil.
+func (_u *PaymentOrderUpdateOne) SetNillableCryptoRequiredConfirmations(v *int) *PaymentOrderUpdateOne {
+	if v != nil {
+		_u.SetCryptoRequiredConfirmations(*v)
+	}
+	return _u
+}
+
+// AddCryptoRequiredConfirmations adds value to the "crypto_required_confirmations" field.
+func (_u *PaymentOrderUpdateOne) AddCryptoRequiredConfirmations(v int) *PaymentOrderUpdateOne {
+	_u.mutation.AddCryptoRequiredConfirmations(v)
+	return _u
+}
+
+// ClearCryptoRequiredConfirmations clears the value of the "crypto_required_confirmations" field.
+func (_u *PaymentOrderUpdateOne) ClearCryptoRequiredConfirmations() *PaymentOrderUpdateOne {
+	_u.mutation.ClearCryptoRequiredConfirmations()
+	return _u
+}
+
+// SetCryptoAmountUsd sets the "crypto_amount_usd" field.
+func (_u *PaymentOrderUpdateOne) SetCryptoAmountUsd(v float64) *PaymentOrderUpdateOne {
+	_u.mutation.ResetCryptoAmountUsd()
+	_u.mutation.SetCryptoAmountUsd(v)
+	return _u
+}
+
+// SetNillableCryptoAmountUsd sets the "crypto_amount_usd" field if the given value is not nil.
+func (_u *PaymentOrderUpdateOne) SetNillableCryptoAmountUsd(v *float64) *PaymentOrderUpdateOne {
+	if v != nil {
+		_u.SetCryptoAmountUsd(*v)
+	}
+	return _u
+}
+
+// AddCryptoAmountUsd adds value to the "crypto_amount_usd" field.
+func (_u *PaymentOrderUpdateOne) AddCryptoAmountUsd(v float64) *PaymentOrderUpdateOne {
+	_u.mutation.AddCryptoAmountUsd(v)
+	return _u
+}
+
+// ClearCryptoAmountUsd clears the value of the "crypto_amount_usd" field.
+func (_u *PaymentOrderUpdateOne) ClearCryptoAmountUsd() *PaymentOrderUpdateOne {
+	_u.mutation.ClearCryptoAmountUsd()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *PaymentOrderUpdateOne) SetStatus(v string) *PaymentOrderUpdateOne {
 	_u.mutation.SetStatus(v)
@@ -1889,6 +2282,26 @@ func (_u *PaymentOrderUpdateOne) check() error {
 			return &ValidationError{Name: "provider_key", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.provider_key": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.CryptoCurrency(); ok {
+		if err := paymentorder.CryptoCurrencyValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_currency", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_currency": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.CryptoNetwork(); ok {
+		if err := paymentorder.CryptoNetworkValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_network", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_network": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.CryptoAddress(); ok {
+		if err := paymentorder.CryptoAddressValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_address", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_address": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.CryptoTxHash(); ok {
+		if err := paymentorder.CryptoTxHashValidator(v); err != nil {
+			return &ValidationError{Name: "crypto_tx_hash", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.crypto_tx_hash": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Status(); ok {
 		if err := paymentorder.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "PaymentOrder.status": %w`, err)}
@@ -2051,6 +2464,57 @@ func (_u *PaymentOrderUpdateOne) sqlSave(ctx context.Context) (_node *PaymentOrd
 	}
 	if _u.mutation.ProviderSnapshotCleared() {
 		_spec.ClearField(paymentorder.FieldProviderSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.CryptoCurrency(); ok {
+		_spec.SetField(paymentorder.FieldCryptoCurrency, field.TypeString, value)
+	}
+	if _u.mutation.CryptoCurrencyCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoCurrency, field.TypeString)
+	}
+	if value, ok := _u.mutation.CryptoNetwork(); ok {
+		_spec.SetField(paymentorder.FieldCryptoNetwork, field.TypeString, value)
+	}
+	if _u.mutation.CryptoNetworkCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoNetwork, field.TypeString)
+	}
+	if value, ok := _u.mutation.CryptoAddress(); ok {
+		_spec.SetField(paymentorder.FieldCryptoAddress, field.TypeString, value)
+	}
+	if _u.mutation.CryptoAddressCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoAddress, field.TypeString)
+	}
+	if value, ok := _u.mutation.CryptoTxHash(); ok {
+		_spec.SetField(paymentorder.FieldCryptoTxHash, field.TypeString, value)
+	}
+	if _u.mutation.CryptoTxHashCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoTxHash, field.TypeString)
+	}
+	if value, ok := _u.mutation.CryptoConfirmations(); ok {
+		_spec.SetField(paymentorder.FieldCryptoConfirmations, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedCryptoConfirmations(); ok {
+		_spec.AddField(paymentorder.FieldCryptoConfirmations, field.TypeInt, value)
+	}
+	if _u.mutation.CryptoConfirmationsCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoConfirmations, field.TypeInt)
+	}
+	if value, ok := _u.mutation.CryptoRequiredConfirmations(); ok {
+		_spec.SetField(paymentorder.FieldCryptoRequiredConfirmations, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedCryptoRequiredConfirmations(); ok {
+		_spec.AddField(paymentorder.FieldCryptoRequiredConfirmations, field.TypeInt, value)
+	}
+	if _u.mutation.CryptoRequiredConfirmationsCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoRequiredConfirmations, field.TypeInt)
+	}
+	if value, ok := _u.mutation.CryptoAmountUsd(); ok {
+		_spec.SetField(paymentorder.FieldCryptoAmountUsd, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedCryptoAmountUsd(); ok {
+		_spec.AddField(paymentorder.FieldCryptoAmountUsd, field.TypeFloat64, value)
+	}
+	if _u.mutation.CryptoAmountUsdCleared() {
+		_spec.ClearField(paymentorder.FieldCryptoAmountUsd, field.TypeFloat64)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(paymentorder.FieldStatus, field.TypeString, value)

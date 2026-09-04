@@ -147,6 +147,13 @@
     @apply dark:shadow-[#2BB741]/20;
   }
 
+  .btn-usdt {
+    @apply bg-[#26A17B] text-white shadow-md shadow-[#26A17B]/25;
+    @apply hover:bg-[#1f8a67] hover:shadow-lg hover:shadow-[#26A17B]/30;
+    @apply active:bg-[#1a7556];
+    @apply dark:shadow-[#26A17B]/20;
+  }
+
   .btn-sm {
     @apply rounded-lg px-3 py-1.5 text-xs;
   }

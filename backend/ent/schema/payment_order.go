@@ -99,6 +99,42 @@ func (PaymentOrder) Fields() []ent.Field {
 			Optional().
 			SchemaType(map[string]string{dialect.Postgres: "jsonb"}),
 
+		// 加密货币相关字段（用于 USDT 等加密货币充值）
+		field.String("crypto_currency").
+			Optional().
+			Nillable().
+			MaxLen(20).
+			Comment("加密货币类型，如 'USDT'"),
+		field.String("crypto_network").
+			Optional().
+			Nillable().
+			MaxLen(20).
+			Comment("区块链网络，如 'TRC20', 'ERC20', 'BEP20'"),
+		field.String("crypto_address").
+			Optional().
+			Nillable().
+			MaxLen(128).
+			Comment("充值地址"),
+		field.String("crypto_tx_hash").
+			Optional().
+			Nillable().
+			MaxLen(128).
+			Comment("区块链交易哈希"),
+		field.Int("crypto_confirmations").
+			Optional().
+			Nillable().
+			Default(0).
+			Comment("当前确认数"),
+		field.Int("crypto_required_confirmations").
+			Optional().
+			Nillable().
+			Comment("所需确认数"),
+		field.Float("crypto_amount_usd").
+			Optional().
+			Nillable().
+			SchemaType(map[string]string{dialect.Postgres: "decimal(20,2)"}).
+			Comment("美元等值金额（用于汇率锁定）"),
+
 		// 状态
 		field.String("status").
 			MaxLen(30).
@@ -195,5 +231,7 @@ func (PaymentOrder) Indexes() []ent.Index {
 		index.Fields("paid_at"),
 		index.Fields("payment_type", "paid_at"),
 		index.Fields("order_type"),
+		index.Fields("crypto_tx_hash"),
+		index.Fields("crypto_address"),
 	}
 }

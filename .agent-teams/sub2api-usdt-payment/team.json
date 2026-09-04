@@ -1,0 +1,12 @@
+{
+  "name": "sub2api-usdt-payment",
+  "id": "sub2api-usdt-payment",
+  "description": "为sub2api项目对接USDT加密货币充值的方式，包含UI",
+  "captainSessionId": "session-021d41d0-4390-4864-94c3-f1c37c97ed40",
+  "createdAt": 1788447348773,
+  "members": [],
+  "tasks": [],
+  "taskSeq": 0,
+  "phase": "staged",
+  "planReviewState": "awaiting_review"
+}
