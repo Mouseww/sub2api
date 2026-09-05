@@ -12190,6 +12190,8 @@ const allPaymentTypes = computed(() => [
   { value: "wxpay", label: t("payment.methods.wxpay") },
   { value: "stripe", label: t("payment.methods.stripe") },
   { value: "airwallex", label: t("payment.methods.airwallex") },
+  { value: "usdt_trc20", label: "USDT (TRC20)" },
+  { value: "usdt_erc20", label: "USDT (ERC20)" },
 ]);
 
 function isPaymentTypeEnabled(type: string): boolean {
