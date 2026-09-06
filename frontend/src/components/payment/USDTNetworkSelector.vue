@@ -94,7 +94,7 @@
 import { useI18n } from 'vue-i18n'
 import type { USDTNetworkConfig, USDTNetwork } from '@/types/usdt'
 
-const props = defineProps<{
+defineProps<{
   networks: USDTNetworkConfig[]
   selectedNetwork: USDTNetwork | null
 }>()
