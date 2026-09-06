@@ -40,6 +40,14 @@ const (
 	SettingCancelWindowMode              = "CANCEL_RATE_LIMIT_WINDOW_MODE"
 	SettingAlipayForceQRCode             = "ALIPAY_FORCE_QRCODE"
 	SettingAlipayMobilePrecreateDeepLink = "ALIPAY_MOBILE_PRECREATE_DEEP_LINK"
+	// USDT cryptocurrency payment settings
+	SettingUSDTTRC20DepositAddress  = "USDT_TRC20_DEPOSIT_ADDRESS"
+	SettingUSDTTRC20ContractAddress = "USDT_TRC20_CONTRACT_ADDRESS"
+	SettingUSDTTRC20Confirmations   = "USDT_TRC20_CONFIRMATIONS"
+	SettingUSDTERC20DepositAddress  = "USDT_ERC20_DEPOSIT_ADDRESS"
+	SettingUSDTERC20ContractAddress = "USDT_ERC20_CONTRACT_ADDRESS"
+	SettingUSDTERC20Confirmations   = "USDT_ERC20_CONFIRMATIONS"
+	SettingUSDTHMACSecret           = "USDT_HMAC_SECRET"
 )
 
 // Default values for payment configuration settings.

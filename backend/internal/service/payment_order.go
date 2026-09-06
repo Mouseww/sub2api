@@ -386,13 +386,58 @@ func (s *PaymentService) prepareCreateOrderSelectionContext(ctx context.Context,
 // USDT payments don't require PaymentProviderInstance; they use direct blockchain integration
 // with fixed configuration stored in system settings.
 func (s *PaymentService) createUSDTSelection(paymentType string) *payment.InstanceSelection {
-	// USDT payments use a virtual "usdt" provider with the payment type as instance ID
+	config := s.loadUSDTConfig(paymentType)
+
 	return &payment.InstanceSelection{
 		InstanceID:  paymentType, // Use payment type (usdt_trc20 or usdt_erc20) as virtual instance ID
 		ProviderKey: payment.TypeUSDT,
 		PaymentMode: "native",
-		Config:      make(map[string]string), // Config will be loaded from settings when creating provider
+		Config:      config,
 	}
+}
+
+// loadUSDTConfig loads USDT configuration from system settings based on payment type.
+func (s *PaymentService) loadUSDTConfig(paymentType string) map[string]string {
+	config := make(map[string]string)
+	ctx := context.Background()
+
+	if s.configService == nil || s.configService.settingRepo == nil {
+		return config
+	}
+
+	// Determine network type and load corresponding settings
+	var networkID string
+	var depositAddressKey, contractAddressKey, confirmationsKey string
+
+	if paymentType == payment.TypeUSDTTRC20 {
+		networkID = "TRC20"
+		depositAddressKey = SettingUSDTTRC20DepositAddress
+		contractAddressKey = SettingUSDTTRC20ContractAddress
+		confirmationsKey = SettingUSDTTRC20Confirmations
+	} else if paymentType == payment.TypeUSDTERC20 {
+		networkID = "ERC20"
+		depositAddressKey = SettingUSDTERC20DepositAddress
+		contractAddressKey = SettingUSDTERC20ContractAddress
+		confirmationsKey = SettingUSDTERC20Confirmations
+	} else {
+		return config
+	}
+
+	// Load settings
+	depositAddress, _ := s.configService.settingRepo.GetValue(ctx, depositAddressKey)
+	contractAddress, _ := s.configService.settingRepo.GetValue(ctx, contractAddressKey)
+	confirmations, _ := s.configService.settingRepo.GetValue(ctx, confirmationsKey)
+	hmacSecret, _ := s.configService.settingRepo.GetValue(ctx, SettingUSDTHMACSecret)
+
+	config["network_id"] = networkID
+	config["deposit_address"] = depositAddress
+	config["contract_address"] = contractAddress
+	if confirmations != "" {
+		config["confirmations"] = confirmations
+	}
+	config["hmac_secret"] = hmacSecret
+
+	return config
 }
 
 func requestNeedsWeChatJSAPICompatibility(req CreateOrderRequest) bool {
