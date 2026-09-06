@@ -345,7 +345,7 @@ func pcComputeGlobalRange(methods map[string]MethodLimits) (globalMin, globalMax
 // Cryptocurrency methods don't require PaymentProviderInstance since they use direct blockchain integration.
 func (s *PaymentConfigService) addCryptoPaymentMethods(ctx context.Context, resp *MethodLimitsResponse) error {
 	// Get enabled payment types from settings
-	enabledTypes, err := s.getSetting(ctx, SettingEnabledPaymentTypes)
+	enabledTypes, err := s.settingRepo.GetValue(ctx, SettingEnabledPaymentTypes)
 	if err != nil || enabledTypes == "" {
 		return nil // No enabled types configured, skip
 	}
