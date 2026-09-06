@@ -15,6 +15,7 @@ import (
 // GetAvailableMethodLimits collects all payment types from enabled provider
 // instances and returns limits for each, plus the global widest range.
 // Stripe sub-types (card, link) are aggregated under "stripe".
+// Also includes enabled cryptocurrency payment methods (USDT) from settings.
 func (s *PaymentConfigService) GetAvailableMethodLimits(ctx context.Context) (*MethodLimitsResponse, error) {
 	instances, err := s.entClient.PaymentProviderInstance.Query().
 		Where(paymentproviderinstance.EnabledEQ(true)).All(ctx)
@@ -36,6 +37,13 @@ func (s *PaymentConfigService) GetAvailableMethodLimits(ctx context.Context) (*M
 		ml.Currency = currency
 		resp.Methods[ml.PaymentType] = ml
 	}
+
+	// Add enabled cryptocurrency payment methods (USDT)
+	if err := s.addCryptoPaymentMethods(ctx, resp); err != nil {
+		// Log error but don't fail the entire request
+		// Crypto methods are optional and shouldn't break traditional payment methods
+	}
+
 	resp.GlobalMin, resp.GlobalMax = pcComputeGlobalRange(resp.Methods)
 	return resp, nil
 }
@@ -331,4 +339,45 @@ func pcComputeGlobalRange(methods map[string]MethodLimits) (globalMin, globalMax
 		globalMax = 0
 	}
 	return globalMin, globalMax
+}
+
+// addCryptoPaymentMethods adds enabled cryptocurrency payment methods (USDT) to the response.
+// Cryptocurrency methods don't require PaymentProviderInstance since they use direct blockchain integration.
+func (s *PaymentConfigService) addCryptoPaymentMethods(ctx context.Context, resp *MethodLimitsResponse) error {
+	// Get enabled payment types from settings
+	enabledTypes, err := s.getSetting(ctx, SettingEnabledPaymentTypes)
+	if err != nil || enabledTypes == "" {
+		return nil // No enabled types configured, skip
+	}
+
+	types := strings.Split(enabledTypes, ",")
+	for _, t := range types {
+		t = strings.TrimSpace(t)
+		// Check if it's a USDT payment type
+		if t == string(payment.TypeUSDTTRC20) || t == string(payment.TypeUSDTERC20) {
+			// Add USDT payment method with default limits
+			// USDT uses USD as currency since it's a stablecoin pegged to USD
+			resp.Methods[t] = MethodLimits{
+				PaymentType: t,
+				DisplayName: s.getCryptoDisplayName(t),
+				Currency:    "USD",
+				SingleMin:   1.0,   // Minimum 1 USDT
+				SingleMax:   0,     // No maximum (unlimited)
+				DailyLimit:  0,     // No daily limit (unlimited)
+			}
+		}
+	}
+	return nil
+}
+
+// getCryptoDisplayName returns the display name for cryptocurrency payment types.
+func (s *PaymentConfigService) getCryptoDisplayName(paymentType string) string {
+	switch paymentType {
+	case string(payment.TypeUSDTTRC20):
+		return "USDT (TRC20)"
+	case string(payment.TypeUSDTERC20):
+		return "USDT (ERC20)"
+	default:
+		return ""
+	}
 }
