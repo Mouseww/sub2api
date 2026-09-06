@@ -347,6 +347,12 @@ func (s *PaymentService) checkDailyLimit(ctx context.Context, tx *dbent.Tx, user
 }
 
 func (s *PaymentService) selectCreateOrderInstance(ctx context.Context, req CreateOrderRequest, cfg *PaymentConfig, payAmount float64) (*payment.InstanceSelection, error) {
+	// USDT cryptocurrency payments don't require PaymentProviderInstance
+	// They use direct blockchain integration with fixed configuration
+	if payment.GetBasePaymentType(req.PaymentType) == payment.TypeUSDT {
+		return s.createUSDTSelection(req.PaymentType), nil
+	}
+
 	selectCtx, err := s.prepareCreateOrderSelectionContext(ctx, req)
 	if err != nil {
 		return nil, err
@@ -374,6 +380,19 @@ func (s *PaymentService) prepareCreateOrderSelectionContext(ctx context.Context,
 		return nil, err
 	}
 	return payment.WithWxpayJSAPIAppID(ctx, expectedAppID), nil
+}
+
+// createUSDTSelection creates a virtual InstanceSelection for USDT cryptocurrency payments.
+// USDT payments don't require PaymentProviderInstance; they use direct blockchain integration
+// with fixed configuration stored in system settings.
+func (s *PaymentService) createUSDTSelection(paymentType string) *payment.InstanceSelection {
+	// USDT payments use a virtual "usdt" provider with the payment type as instance ID
+	return &payment.InstanceSelection{
+		InstanceID:  paymentType, // Use payment type (usdt_trc20 or usdt_erc20) as virtual instance ID
+		ProviderKey: payment.TypeUSDT,
+		PaymentMode: "native",
+		Config:      make(map[string]string), // Config will be loaded from settings when creating provider
+	}
 }
 
 func requestNeedsWeChatJSAPICompatibility(req CreateOrderRequest) bool {
@@ -612,6 +631,12 @@ func (s *PaymentService) buildWeChatOAuthRequiredResponse(ctx context.Context, r
 }
 
 func (s *PaymentService) validateSelectedCreateOrderInstance(ctx context.Context, req CreateOrderRequest, sel *payment.InstanceSelection) error {
+	// USDT cryptocurrency payments don't require instance validation
+	// They use direct blockchain integration without provider instances
+	if sel != nil && sel.ProviderKey == payment.TypeUSDT {
+		return nil
+	}
+
 	if !requiresWeChatJSAPICompatibleSelection(req, sel) {
 		return nil
 	}
