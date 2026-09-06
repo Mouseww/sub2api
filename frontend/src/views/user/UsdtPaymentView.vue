@@ -14,7 +14,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import AppLayout from '@/layouts/AppLayout.vue'
+import AppLayout from '@/components/layout/AppLayout.vue'
 import USDTPaymentFlow from '@/components/payment/USDTPaymentFlow.vue'
 import { useAppStore } from '@/stores/app'
 
