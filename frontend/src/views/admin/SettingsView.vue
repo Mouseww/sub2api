@@ -8244,6 +8244,103 @@
             </div>
           </div>
 
+          <!-- USDT Cryptocurrency Configuration -->
+          <div v-if="form.payment_enabled" class="card">
+            <div class="border-b border-gray-100 px-6 py-4 dark:border-dark-700">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                USDT 加密货币配置
+              </h2>
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                配置 USDT 加密货币支付所需的区块链参数
+              </p>
+            </div>
+            <div class="space-y-4 p-6">
+              <!-- HMAC Secret (共享) -->
+              <div>
+                <label class="input-label">HMAC 密钥 (共享)</label>
+                <input
+                  v-model="form.usdt_hmac_secret"
+                  type="text"
+                  class="input"
+                  placeholder="用于生成唯一支付金额的密钥"
+                />
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  用于生成唯一支付金额的 HMAC 密钥，建议使用 32 字节以上的随机字符串
+                </p>
+              </div>
+
+              <!-- TRC20 Configuration -->
+              <div class="space-y-3 rounded-lg border border-gray-200 p-4 dark:border-dark-600">
+                <h3 class="font-medium text-gray-900 dark:text-white">TRC20 网络配置</h3>
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div>
+                    <label class="input-label">TRC20 充值地址</label>
+                    <input
+                      v-model="form.usdt_trc20_deposit_address"
+                      type="text"
+                      class="input"
+                      placeholder="TYourTRC20WalletAddress"
+                    />
+                  </div>
+                  <div>
+                    <label class="input-label">TRC20 合约地址</label>
+                    <input
+                      v-model="form.usdt_trc20_contract_address"
+                      type="text"
+                      class="input"
+                      placeholder="TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+                    />
+                  </div>
+                  <div>
+                    <label class="input-label">TRC20 确认块数</label>
+                    <input
+                      v-model.number="form.usdt_trc20_confirmations"
+                      type="number"
+                      min="1"
+                      class="input"
+                      placeholder="19 (默认)"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- ERC20 Configuration -->
+              <div class="space-y-3 rounded-lg border border-gray-200 p-4 dark:border-dark-600">
+                <h3 class="font-medium text-gray-900 dark:text-white">ERC20 网络配置</h3>
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div>
+                    <label class="input-label">ERC20 充值地址</label>
+                    <input
+                      v-model="form.usdt_erc20_deposit_address"
+                      type="text"
+                      class="input"
+                      placeholder="0xYourERC20WalletAddress"
+                    />
+                  </div>
+                  <div>
+                    <label class="input-label">ERC20 合约地址</label>
+                    <input
+                      v-model="form.usdt_erc20_contract_address"
+                      type="text"
+                      class="input"
+                      placeholder="0xdac17f958d2ee523a2206206994597c13d831ec7"
+                    />
+                  </div>
+                  <div>
+                    <label class="input-label">ERC20 确认块数</label>
+                    <input
+                      v-model.number="form.usdt_erc20_confirmations"
+                      type="number"
+                      min="1"
+                      class="input"
+                      placeholder="12 (默认)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Provider Management -->
           <PaymentProviderList
             v-if="form.payment_enabled"
@@ -9594,6 +9691,13 @@ const form = reactive<SettingsForm>({
   payment_cancel_rate_limit_window_mode: "rolling",
   payment_alipay_force_qrcode: false,
   payment_alipay_mobile_precreate_deep_link: false,
+  usdt_hmac_secret: "",
+  usdt_trc20_deposit_address: "",
+  usdt_trc20_contract_address: "",
+  usdt_trc20_confirmations: 19,
+  usdt_erc20_deposit_address: "",
+  usdt_erc20_contract_address: "",
+  usdt_erc20_confirmations: 12,
   table_default_page_size: tablePageSizeDefault,
   table_page_size_options: [10, 20, 50, 100],
   custom_menu_items: [] as Array<{
