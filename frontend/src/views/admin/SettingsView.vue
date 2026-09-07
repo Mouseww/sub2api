@@ -9618,6 +9618,14 @@ type SettingsForm = Omit<
   // 系统全局平台限额 map；form 内始终归一化为全 4 平台对象（模板非空绑定依赖此不变量）
   default_platform_quotas: DefaultPlatformQuotasMap;
   account_scheduling_thresholds: ReturnType<typeof normalizeAccountSchedulingThresholdsMap>;
+  // USDT 加密货币支付
+  usdt_hmac_secret: string;
+  usdt_trc20_deposit_address: string;
+  usdt_trc20_contract_address: string;
+  usdt_trc20_confirmations: number;
+  usdt_erc20_deposit_address: string;
+  usdt_erc20_contract_address: string;
+  usdt_erc20_confirmations: number;
 };
 
 const schedulingThresholdPlatforms = SCHEDULING_THRESHOLD_PLATFORMS;
