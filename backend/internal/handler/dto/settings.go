@@ -281,6 +281,15 @@ type SystemSettings struct {
 	PaymentHelpImageURL              string   `json:"payment_help_image_url"`
 	PaymentHelpText                  string   `json:"payment_help_text"`
 
+	// USDT cryptocurrency payment settings
+	PaymentUSDTHMACSecret          string `json:"payment_usdt_hmac_secret"`
+	PaymentUSDTTRC20DepositAddress  string `json:"payment_usdt_trc20_deposit_address"`
+	PaymentUSDTTRC20ContractAddress string `json:"payment_usdt_trc20_contract_address"`
+	PaymentUSDTTRC20Confirmations   int    `json:"payment_usdt_trc20_confirmations"`
+	PaymentUSDTERC20DepositAddress  string `json:"payment_usdt_erc20_deposit_address"`
+	PaymentUSDTERC20ContractAddress string `json:"payment_usdt_erc20_contract_address"`
+	PaymentUSDTERC20Confirmations   int    `json:"payment_usdt_erc20_confirmations"`
+
 	// Cancel rate limit
 	PaymentCancelRateLimitEnabled bool   `json:"payment_cancel_rate_limit_enabled"`
 	PaymentCancelRateLimitMax     int    `json:"payment_cancel_rate_limit_max"`
@@ -343,6 +352,10 @@ type SystemSettings struct {
 
 	// 允许终端用户在用量页查看自己的失败请求
 	AllowUserViewErrorRequests bool `json:"allow_user_view_error_requests"`
+
+	// GeoBlock 地理封锁设置
+	GeoBlockEnabled   bool     `json:"geo_block_enabled"`
+	GeoBlockWhitelist []string `json:"geo_block_whitelist"`
 }
 
 type DefaultSubscriptionSetting struct {

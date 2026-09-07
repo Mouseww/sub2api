@@ -328,6 +328,15 @@ type UpdateSettingsRequest struct {
 	// Use Alipay face-to-face precreate and an app deep link on mobile clients.
 	PaymentAlipayMobilePrecreateDeepLink *bool `json:"payment_alipay_mobile_precreate_deep_link"`
 
+	// USDT cryptocurrency payment settings
+	PaymentUSDTHMACSecret           *string `json:"payment_usdt_hmac_secret"`
+	PaymentUSDTTRC20DepositAddress  *string `json:"payment_usdt_trc20_deposit_address"`
+	PaymentUSDTTRC20ContractAddress *string `json:"payment_usdt_trc20_contract_address"`
+	PaymentUSDTTRC20Confirmations   *int    `json:"payment_usdt_trc20_confirmations"`
+	PaymentUSDTERC20DepositAddress  *string `json:"payment_usdt_erc20_deposit_address"`
+	PaymentUSDTERC20ContractAddress *string `json:"payment_usdt_erc20_contract_address"`
+	PaymentUSDTERC20Confirmations   *int    `json:"payment_usdt_erc20_confirmations"`
+
 	// Channel Monitor feature switch
 	ChannelMonitorEnabled                *bool   `json:"channel_monitor_enabled"`
 	ChannelMonitorMode                   *string `json:"channel_monitor_mode"`
@@ -380,6 +389,10 @@ type UpdateSettingsRequest struct {
 	AuthSourceDingTalkPlatformQuotas map[string]*service.DefaultPlatformQuotaSetting `json:"auth_source_default_dingtalk_platform_quotas"`
 
 	AllowUserViewErrorRequests *bool `json:"allow_user_view_error_requests"`
+
+	// GeoBlock 地理封锁设置
+	GeoBlockEnabled   *bool     `json:"geo_block_enabled"`
+	GeoBlockWhitelist *[]string `json:"geo_block_whitelist"`
 }
 
 // UpdateSettings 更新系统设置
@@ -1654,6 +1667,18 @@ func (h *SettingHandler) UpdateSettings(c *gin.Context) {
 			}
 			return previousSettings.AllowUserViewErrorRequests
 		}(),
+		GeoBlockEnabled: func() bool {
+			if req.GeoBlockEnabled != nil {
+				return *req.GeoBlockEnabled
+			}
+			return previousSettings.GeoBlockEnabled
+		}(),
+		GeoBlockWhitelist: func() []string {
+			if req.GeoBlockWhitelist != nil {
+				return *req.GeoBlockWhitelist
+			}
+			return previousSettings.GeoBlockWhitelist
+		}(),
 		OpsMonitoringEnabled: func() bool {
 			if req.OpsMonitoringEnabled != nil {
 				return *req.OpsMonitoringEnabled
@@ -2095,6 +2120,23 @@ func (h *SettingHandler) UpdateSettings(c *gin.Context) {
 		}
 	}
 
+	// Update USDT settings when any USDT field is provided
+	if h.paymentConfigService != nil && hasUSDTFields(req) {
+		usdtReq := service.UpdateUSDTSettingsRequest{
+			HMACSecret:           req.PaymentUSDTHMACSecret,
+			TRC20DepositAddress:  req.PaymentUSDTTRC20DepositAddress,
+			TRC20ContractAddress: req.PaymentUSDTTRC20ContractAddress,
+			TRC20Confirmations:   req.PaymentUSDTTRC20Confirmations,
+			ERC20DepositAddress:  req.PaymentUSDTERC20DepositAddress,
+			ERC20ContractAddress: req.PaymentUSDTERC20ContractAddress,
+			ERC20Confirmations:   req.PaymentUSDTERC20Confirmations,
+		}
+		if err := h.paymentConfigService.UpdateUSDTSettings(c.Request.Context(), usdtReq); err != nil {
+			response.ErrorFrom(c, err)
+			return
+		}
+	}
+
 	h.auditSettingsUpdate(c, previousSettings, settings, previousAuthSourceDefaults, authSourceDefaults, auditReq)
 
 	// 重新获取设置返回
@@ -2124,6 +2166,15 @@ func (h *SettingHandler) UpdateSettings(c *gin.Context) {
 	}
 	if updatedPaymentCfg == nil {
 		updatedPaymentCfg = &service.PaymentConfig{}
+	}
+
+	// Reload USDT settings for response
+	var updatedUSDTCfg *service.USDTSettings
+	if h.paymentConfigService != nil {
+		updatedUSDTCfg, _ = h.paymentConfigService.GetUSDTSettings(c.Request.Context())
+	}
+	if updatedUSDTCfg == nil {
+		updatedUSDTCfg = &service.USDTSettings{}
 	}
 	passkeyConfigured, passkeyRPID, passkeyRPOrigins := h.settingService.PasskeyConfiguration()
 
@@ -2361,6 +2412,14 @@ func (h *SettingHandler) UpdateSettings(c *gin.Context) {
 		PaymentAlipayForceQRCode:                               updatedPaymentCfg.AlipayForceQRCode,
 		PaymentAlipayMobilePrecreateDeepLink:                   updatedPaymentCfg.AlipayMobilePrecreateDeepLink,
 
+		PaymentUSDTHMACSecret:           updatedUSDTCfg.HMACSecret,
+		PaymentUSDTTRC20DepositAddress:  updatedUSDTCfg.TRC20DepositAddress,
+		PaymentUSDTTRC20ContractAddress: updatedUSDTCfg.TRC20ContractAddress,
+		PaymentUSDTTRC20Confirmations:   updatedUSDTCfg.TRC20Confirmations,
+		PaymentUSDTERC20DepositAddress:  updatedUSDTCfg.ERC20DepositAddress,
+		PaymentUSDTERC20ContractAddress: updatedUSDTCfg.ERC20ContractAddress,
+		PaymentUSDTERC20Confirmations:   updatedUSDTCfg.ERC20Confirmations,
+
 		ChannelMonitorEnabled:                updatedSettings.ChannelMonitorEnabled,
 		ChannelMonitorMode:                   updatedSettings.ChannelMonitorMode,
 		ChannelMonitorDefaultIntervalSeconds: updatedSettings.ChannelMonitorDefaultIntervalSeconds,
@@ -2385,6 +2444,8 @@ func (h *SettingHandler) UpdateSettings(c *gin.Context) {
 		CyberSessionBlockTTLSeconds: updatedSettings.CyberSessionBlockTTLSeconds,
 		AccountSchedulingThresholds: updatedSettings.AccountSchedulingThresholds,
 		AllowUserViewErrorRequests:  updatedSettings.AllowUserViewErrorRequests,
+		GeoBlockEnabled:             updatedSettings.GeoBlockEnabled,
+		GeoBlockWhitelist:           updatedSettings.GeoBlockWhitelist,
 	}
 	if fastPolicy, err := h.settingService.GetOpenAIFastPolicySettings(c.Request.Context()); err != nil {
 		slog.Error("openai_fast_policy_settings_get_failed", "error", err)
@@ -2427,6 +2488,14 @@ func hasPaymentFields(req UpdateSettingsRequest) bool {
 		req.PaymentCancelRateLimitMax != nil || req.PaymentCancelRateLimitWindow != nil ||
 		req.PaymentCancelRateLimitUnit != nil || req.PaymentCancelRateLimitMode != nil ||
 		req.PaymentAlipayForceQRCode != nil || req.PaymentAlipayMobilePrecreateDeepLink != nil
+}
+
+func hasUSDTFields(req UpdateSettingsRequest) bool {
+	return req.PaymentUSDTHMACSecret != nil ||
+		req.PaymentUSDTTRC20DepositAddress != nil || req.PaymentUSDTTRC20ContractAddress != nil ||
+		req.PaymentUSDTTRC20Confirmations != nil ||
+		req.PaymentUSDTERC20DepositAddress != nil || req.PaymentUSDTERC20ContractAddress != nil ||
+		req.PaymentUSDTERC20Confirmations != nil
 }
 
 // ensureDingTalkSyncAttributes 在保存 settings 后，按 admin 配置的 (attr key, attr name)

@@ -68,6 +68,15 @@ export default {
           cyberSessionBlockHint: '开启后,被上游网络安全策略(cyber_policy)拦截的会话将在 TTL 内被本地屏蔽,不再发往上游。仅屏蔽该会话,不影响同 Key 其他会话。',
           cyberSessionBlockTTL: '屏蔽时长(秒)',
         },
+        geoBlock: {
+          title: 'GeoBlock 地理封锁',
+          description: '屏蔽来自中国大陆 IP 的请求。可配置白名单 IP 或 CIDR 网段绕过封锁。默认关闭。',
+          enabled: '启用大陆 IP 封锁',
+          enabledHint: '开启后，来自中国大陆的请求将被拒绝。白名单中的 IP/CIDR 始终放行。',
+          whitelist: '白名单 IP / CIDR',
+          whitelistHint: '每行一条，支持单个 IP（如 1.2.3.4）和 CIDR 网段（如 1.2.3.0/24）。',
+          whitelistPlaceholder: '1.2.3.4\n10.0.0.0/8',
+        },
         affiliate: {
           title: '邀请返利',
           description: '老用户邀请新用户注册，新用户充值后老用户按比例获得返利额度。默认关闭。',

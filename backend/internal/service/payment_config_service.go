@@ -595,3 +595,75 @@ func visibleMethodShouldBeExposed(method string, vals map[string]string, availab
 	source := NormalizeVisibleMethodSource(method, vals[sourceKey])
 	return source != "" && available[source]
 }
+
+// USDTSettings holds the USDT cryptocurrency payment configuration.
+type USDTSettings struct {
+	HMACSecret          string `json:"hmac_secret"`
+	TRC20DepositAddress  string `json:"trc20_deposit_address"`
+	TRC20ContractAddress string `json:"trc20_contract_address"`
+	TRC20Confirmations   int    `json:"trc20_confirmations"`
+	ERC20DepositAddress  string `json:"erc20_deposit_address"`
+	ERC20ContractAddress string `json:"erc20_contract_address"`
+	ERC20Confirmations   int    `json:"erc20_confirmations"`
+}
+
+// GetUSDTSettings loads all USDT configuration from system settings.
+func (s *PaymentConfigService) GetUSDTSettings(ctx context.Context) (*USDTSettings, error) {
+	keys := []string{
+		SettingUSDTHMACSecret,
+		SettingUSDTTRC20DepositAddress, SettingUSDTTRC20ContractAddress, SettingUSDTTRC20Confirmations,
+		SettingUSDTERC20DepositAddress, SettingUSDTERC20ContractAddress, SettingUSDTERC20Confirmations,
+	}
+	vals, err := s.settingRepo.GetMultiple(ctx, keys)
+	if err != nil {
+		return nil, err
+	}
+	trc20Conf, _ := strconv.Atoi(vals[SettingUSDTTRC20Confirmations])
+	erc20Conf, _ := strconv.Atoi(vals[SettingUSDTERC20Confirmations])
+	return &USDTSettings{
+		HMACSecret:           vals[SettingUSDTHMACSecret],
+		TRC20DepositAddress:  vals[SettingUSDTTRC20DepositAddress],
+		TRC20ContractAddress: vals[SettingUSDTTRC20ContractAddress],
+		TRC20Confirmations:   trc20Conf,
+		ERC20DepositAddress:  vals[SettingUSDTERC20DepositAddress],
+		ERC20ContractAddress: vals[SettingUSDTERC20ContractAddress],
+		ERC20Confirmations:   erc20Conf,
+	}, nil
+}
+
+// UpdateUSDTSettingsRequest holds updatable USDT fields (nil = keep existing).
+type UpdateUSDTSettingsRequest struct {
+	HMACSecret          *string
+	TRC20DepositAddress  *string
+	TRC20ContractAddress *string
+	TRC20Confirmations   *int
+	ERC20DepositAddress  *string
+	ERC20ContractAddress *string
+	ERC20Confirmations   *int
+}
+
+// UpdateUSDTSettings saves changed USDT configuration values.
+func (s *PaymentConfigService) UpdateUSDTSettings(ctx context.Context, req UpdateUSDTSettingsRequest) error {
+	m := make(map[string]string)
+	setStr := func(key string, v *string) {
+		if v != nil {
+			m[key] = *v
+		}
+	}
+	setInt := func(key string, v *int) {
+		if v != nil && *v > 0 {
+			m[key] = strconv.Itoa(*v)
+		}
+	}
+	setStr(SettingUSDTHMACSecret, req.HMACSecret)
+	setStr(SettingUSDTTRC20DepositAddress, req.TRC20DepositAddress)
+	setStr(SettingUSDTTRC20ContractAddress, req.TRC20ContractAddress)
+	setInt(SettingUSDTTRC20Confirmations, req.TRC20Confirmations)
+	setStr(SettingUSDTERC20DepositAddress, req.ERC20DepositAddress)
+	setStr(SettingUSDTERC20ContractAddress, req.ERC20ContractAddress)
+	setInt(SettingUSDTERC20Confirmations, req.ERC20Confirmations)
+	if len(m) == 0 {
+		return nil
+	}
+	return s.settingRepo.SetMultiple(ctx, m)
+}

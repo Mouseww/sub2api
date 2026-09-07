@@ -68,6 +68,15 @@ export default {
           cyberSessionBlockHint: 'When enabled, sessions hit by upstream cyber_policy are blocked locally for the TTL and no longer forwarded. Only the offending session is blocked; other sessions on the same key are unaffected.',
           cyberSessionBlockTTL: 'Block TTL (seconds)',
         },
+        geoBlock: {
+          title: 'GeoBlock (Geographic Restriction)',
+          description: 'Block requests from mainland China IPs. A whitelist of specific IPs or CIDR ranges can bypass the block. Disabled by default.',
+          enabled: 'Enable Mainland IP Block',
+          enabledHint: 'When enabled, requests from mainland China IPs are rejected. Whitelisted IPs/CIDRs are always allowed through.',
+          whitelist: 'Whitelist IP / CIDR',
+          whitelistHint: 'One entry per line. Supports single IPs (e.g. 1.2.3.4) and CIDR ranges (e.g. 1.2.3.0/24).',
+          whitelistPlaceholder: '1.2.3.4\n10.0.0.0/8',
+        },
         affiliate: {
           title: 'Affiliate (Invite Rebate)',
           description: 'Existing users invite new ones; the inviter earns a percentage rebate on the invitee’s recharges. Disabled by default.',

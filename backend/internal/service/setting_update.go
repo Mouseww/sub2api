@@ -544,6 +544,16 @@ func (s *SettingService) buildSystemSettingsUpdates(ctx context.Context, setting
 
 	updates[SettingKeyAllowUserViewErrorRequests] = strconv.FormatBool(settings.AllowUserViewErrorRequests)
 
+	// GeoBlock 地理封锁
+	updates[SettingKeyGeoBlockEnabled] = strconv.FormatBool(settings.GeoBlockEnabled)
+	if settings.GeoBlockWhitelist != nil {
+		blob, err := json.Marshal(settings.GeoBlockWhitelist)
+		if err != nil {
+			return nil, fmt.Errorf("marshal geo block whitelist: %w", err)
+		}
+		updates[SettingKeyGeoBlockWhitelist] = string(blob)
+	}
+
 	return updates, nil
 }
 

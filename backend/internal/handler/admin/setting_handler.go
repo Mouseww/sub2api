@@ -130,6 +130,15 @@ func (h *SettingHandler) GetSettings(c *gin.Context) {
 	if paymentCfg == nil {
 		paymentCfg = &service.PaymentConfig{}
 	}
+
+	// Load USDT settings
+	var usdtCfg *service.USDTSettings
+	if h.paymentConfigService != nil {
+		usdtCfg, _ = h.paymentConfigService.GetUSDTSettings(c.Request.Context())
+	}
+	if usdtCfg == nil {
+		usdtCfg = &service.USDTSettings{}
+	}
 	passkeyConfigured, passkeyRPID, passkeyRPOrigins := h.settingService.PasskeyConfiguration()
 
 	payload := dto.SystemSettings{
@@ -371,6 +380,14 @@ func (h *SettingHandler) GetSettings(c *gin.Context) {
 		PaymentAlipayForceQRCode:                               paymentCfg.AlipayForceQRCode,
 		PaymentAlipayMobilePrecreateDeepLink:                   paymentCfg.AlipayMobilePrecreateDeepLink,
 
+		PaymentUSDTHMACSecret:           usdtCfg.HMACSecret,
+		PaymentUSDTTRC20DepositAddress:  usdtCfg.TRC20DepositAddress,
+		PaymentUSDTTRC20ContractAddress: usdtCfg.TRC20ContractAddress,
+		PaymentUSDTTRC20Confirmations:   usdtCfg.TRC20Confirmations,
+		PaymentUSDTERC20DepositAddress:  usdtCfg.ERC20DepositAddress,
+		PaymentUSDTERC20ContractAddress: usdtCfg.ERC20ContractAddress,
+		PaymentUSDTERC20Confirmations:   usdtCfg.ERC20Confirmations,
+
 		ChannelMonitorEnabled:                settings.ChannelMonitorEnabled,
 		ChannelMonitorMode:                   settings.ChannelMonitorMode,
 		ChannelMonitorDefaultIntervalSeconds: settings.ChannelMonitorDefaultIntervalSeconds,
@@ -392,6 +409,8 @@ func (h *SettingHandler) GetSettings(c *gin.Context) {
 
 		AccountSchedulingThresholds: settings.AccountSchedulingThresholds,
 		AllowUserViewErrorRequests:  settings.AllowUserViewErrorRequests,
+		GeoBlockEnabled:             settings.GeoBlockEnabled,
+		GeoBlockWhitelist:           settings.GeoBlockWhitelist,
 	}
 
 	// OpenAI fast policy (stored under a dedicated setting key)

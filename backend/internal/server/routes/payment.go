@@ -16,6 +16,7 @@ func RegisterPaymentRoutes(
 	paymentHandler *handler.PaymentHandler,
 	webhookHandler *handler.PaymentWebhookHandler,
 	adminPaymentHandler *admin.PaymentHandler,
+	usdtHandler *handler.USDTPaymentHandler,
 	jwtAuth middleware.JWTAuthMiddleware,
 	adminAuth middleware.AdminAuthMiddleware,
 	auditLog middleware.AuditLogMiddleware,
@@ -43,6 +44,16 @@ func RegisterPaymentRoutes(
 			orders.POST("/:id/cancel", paymentHandler.CancelOrder)
 			orders.POST("/:id/refund-request", paymentHandler.RequestRefund)
 			orders.GET("/refund-eligible-providers", paymentHandler.GetRefundEligibleProviders)
+		}
+
+		// USDT specific routes
+		usdt := authenticated.Group("/usdt")
+		{
+			usdt.GET("/networks", usdtHandler.GetNetworks)
+			usdt.POST("/orders", usdtHandler.CreateUSDTOrder)
+			usdt.GET("/orders/:id", usdtHandler.GetUSDTOrderStatus)
+			usdt.GET("/orders/:id/status", usdtHandler.GetUSDTOrderStatus)
+			usdt.POST("/orders/:id/cancel", usdtHandler.CancelUSDTOrder)
 		}
 	}
 

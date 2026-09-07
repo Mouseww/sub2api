@@ -674,6 +674,13 @@ export interface SystemSettings {
   payment_cancel_rate_limit_window_mode: string;
   payment_alipay_force_qrcode?: boolean;
   payment_alipay_mobile_precreate_deep_link?: boolean;
+  payment_usdt_hmac_secret?: string;
+  payment_usdt_trc20_deposit_address?: string;
+  payment_usdt_trc20_contract_address?: string;
+  payment_usdt_trc20_confirmations?: number;
+  payment_usdt_erc20_deposit_address?: string;
+  payment_usdt_erc20_contract_address?: string;
+  payment_usdt_erc20_confirmations?: number;
   payment_visible_method_alipay_source?: string;
   payment_visible_method_wxpay_source?: string;
   payment_visible_method_alipay_enabled?: boolean;
@@ -738,6 +745,10 @@ export interface SystemSettings {
 
   // Allow user view error requests
   allow_user_view_error_requests: boolean;
+
+  // GeoBlock 地理封锁设置
+  geo_block_enabled: boolean;
+  geo_block_whitelist: string[];
 }
 
 export interface UpdateSettingsRequest {
@@ -987,6 +998,13 @@ export interface UpdateSettingsRequest {
   payment_cancel_rate_limit_window_mode?: string;
   payment_alipay_force_qrcode?: boolean;
   payment_alipay_mobile_precreate_deep_link?: boolean;
+  payment_usdt_hmac_secret?: string;
+  payment_usdt_trc20_deposit_address?: string;
+  payment_usdt_trc20_contract_address?: string;
+  payment_usdt_trc20_confirmations?: number;
+  payment_usdt_erc20_deposit_address?: string;
+  payment_usdt_erc20_contract_address?: string;
+  payment_usdt_erc20_confirmations?: number;
   payment_visible_method_alipay_source?: string;
   payment_visible_method_wxpay_source?: string;
   payment_visible_method_alipay_enabled?: boolean;
@@ -1038,6 +1056,10 @@ export interface UpdateSettingsRequest {
   openai_fast_policy_settings?: OpenAIFastPolicySettings;
 
   allow_user_view_error_requests?: boolean;
+
+  // GeoBlock 地理封锁设置
+  geo_block_enabled?: boolean;
+  geo_block_whitelist?: string[];
 }
 
 /**

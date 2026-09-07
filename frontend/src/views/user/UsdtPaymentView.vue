@@ -3,6 +3,7 @@
     <div class="mx-auto max-w-2xl py-6">
       <USDTPaymentFlow
         :amount="orderAmount"
+        :existing-order-id="existingOrderId"
         @success="handleSuccess"
         @cancel="handleCancel"
       />
@@ -13,30 +14,20 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import USDTPaymentFlow from '@/components/payment/USDTPaymentFlow.vue'
-import { useAppStore } from '@/stores/app'
 
 const route = useRoute()
 const router = useRouter()
-const { t } = useI18n()
-const appStore = useAppStore()
 
 const orderAmount = ref(0)
+const existingOrderId = ref<number | undefined>(undefined)
 
 onMounted(() => {
   const orderId = route.query.order_id
-  if (!orderId) {
-    appStore.showError(t('payment.errors.NOT_FOUND'))
-    router.push('/payment')
-    return
+  if (orderId) {
+    existingOrderId.value = Number(orderId)
   }
-
-  // For now, we'll need the amount from somewhere
-  // In a real implementation, we'd fetch the order details
-  // For this demo, we'll use a placeholder
-  orderAmount.value = 100
 })
 
 function handleSuccess(orderId: number) {

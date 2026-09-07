@@ -261,6 +261,8 @@ func (s *SettingService) InitializeDefaultSettings(ctx context.Context) error {
 		SettingKeyOpenAIAdvancedSchedulerWeightSessionSticky:         "",
 
 		SettingKeyAllowUserViewErrorRequests: "false",
+		SettingKeyGeoBlockEnabled:            "false",
+		SettingKeyGeoBlockWhitelist:          "[]",
 	}
 
 	return s.settingRepo.SetMultiple(ctx, defaults)
@@ -970,6 +972,11 @@ func (s *SettingService) parseSettings(settings map[string]string) *SystemSettin
 	}
 
 	result.AllowUserViewErrorRequests = settings[SettingKeyAllowUserViewErrorRequests] == "true" // default false
+
+	result.GeoBlockEnabled = settings[SettingKeyGeoBlockEnabled] == "true"
+	if raw := settings[SettingKeyGeoBlockWhitelist]; raw != "" {
+		_ = json.Unmarshal([]byte(raw), &result.GeoBlockWhitelist)
+	}
 
 	// Publish Grok default model_mapping options for accounts with empty mapping.
 	xai.SetRuntimeModelMappingOptions(xai.ModelMappingOptions{

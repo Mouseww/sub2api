@@ -419,6 +419,20 @@ func (s *PaymentService) loadUSDTConfig(paymentType string) map[string]string {
 		depositAddressKey = SettingUSDTERC20DepositAddress
 		contractAddressKey = SettingUSDTERC20ContractAddress
 		confirmationsKey = SettingUSDTERC20Confirmations
+	} else if paymentType == payment.TypeUSDT {
+		// Generic "usdt" type: resolve to TRC20 if configured, otherwise ERC20
+		trc20Addr, _ := s.configService.settingRepo.GetValue(ctx, SettingUSDTTRC20DepositAddress)
+		if trc20Addr != "" {
+			networkID = "TRC20"
+			depositAddressKey = SettingUSDTTRC20DepositAddress
+			contractAddressKey = SettingUSDTTRC20ContractAddress
+			confirmationsKey = SettingUSDTTRC20Confirmations
+		} else {
+			networkID = "ERC20"
+			depositAddressKey = SettingUSDTERC20DepositAddress
+			contractAddressKey = SettingUSDTERC20ContractAddress
+			confirmationsKey = SettingUSDTERC20Confirmations
+		}
 	} else {
 		return config
 	}

@@ -67,6 +67,7 @@ import type { USDTNetworkConfig, USDTNetwork, USDTPaymentOrder } from '@/types/u
 
 const props = defineProps<{
   amount: number
+  existingOrderId?: number
 }>()
 
 const emit = defineEmits<{
@@ -83,6 +84,27 @@ const qrData = ref('')
 const loading = ref(false)
 const submitting = ref(false)
 let pollInterval: ReturnType<typeof setInterval> | null = null
+
+async function loadExistingOrder() {
+  if (!props.existingOrderId) return
+  loading.value = true
+  try {
+    const response = await usdtAPI.getOrderStatus(props.existingOrderId)
+    currentOrder.value = response.data.order
+    qrData.value = response.data.qr_data || ''
+    // Set selectedNetwork so the template shows USDTPaymentPanel (step 2)
+    selectedNetwork.value = response.data.order.network as USDTNetwork
+    // Start polling if order is still in-progress
+    const status = currentOrder.value.status
+    if (status === 'PENDING' || status === 'DETECTED' || status === 'CONFIRMING') {
+      startPolling()
+    }
+  } catch (error) {
+    console.error('Failed to load existing order:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 async function loadNetworks() {
   loading.value = true
@@ -168,8 +190,11 @@ function stopPolling() {
   }
 }
 
-onMounted(() => {
-  loadNetworks()
+onMounted(async () => {
+  await loadNetworks()
+  if (props.existingOrderId) {
+    await loadExistingOrder()
+  }
 })
 
 onUnmounted(() => {

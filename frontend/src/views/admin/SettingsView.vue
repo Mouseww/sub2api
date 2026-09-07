@@ -7296,6 +7296,46 @@
           </div>
         </div>
 
+        <!-- GeoBlock 地理封锁 feature card -->
+        <div class="card">
+          <div class="border-b border-gray-100 px-6 py-4 dark:border-dark-700">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              {{ t('admin.settings.features.geoBlock.title') }}
+            </h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              {{ t('admin.settings.features.geoBlock.description') }}
+            </p>
+          </div>
+          <div class="space-y-5 p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {{ t('admin.settings.features.geoBlock.enabled') }}
+                </label>
+                <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                  {{ t('admin.settings.features.geoBlock.enabledHint') }}
+                </p>
+              </div>
+              <Toggle v-model="form.geo_block_enabled" />
+            </div>
+
+            <div>
+              <label class="input-label">
+                {{ t('admin.settings.features.geoBlock.whitelist') }}
+              </label>
+              <p class="mb-1.5 text-xs text-gray-500 dark:text-gray-400">
+                {{ t('admin.settings.features.geoBlock.whitelistHint') }}
+              </p>
+              <textarea
+                v-model="form.geo_block_whitelist_text"
+                rows="5"
+                class="input font-mono text-xs"
+                :placeholder="t('admin.settings.features.geoBlock.whitelistPlaceholder')"
+              />
+            </div>
+          </div>
+        </div>
+
         <!-- Affiliate (邀请返利) feature card -->
         <div class="card">
           <div class="border-b border-gray-100 px-6 py-4 dark:border-dark-700">
@@ -8259,7 +8299,7 @@
               <div>
                 <label class="input-label">HMAC 密钥 (共享)</label>
                 <input
-                  v-model="form.usdt_hmac_secret"
+                  v-model="form.payment_usdt_hmac_secret"
                   type="text"
                   class="input"
                   placeholder="用于生成唯一支付金额的密钥"
@@ -8276,7 +8316,7 @@
                   <div>
                     <label class="input-label">TRC20 充值地址</label>
                     <input
-                      v-model="form.usdt_trc20_deposit_address"
+                      v-model="form.payment_usdt_trc20_deposit_address"
                       type="text"
                       class="input"
                       placeholder="TYourTRC20WalletAddress"
@@ -8285,7 +8325,7 @@
                   <div>
                     <label class="input-label">TRC20 合约地址</label>
                     <input
-                      v-model="form.usdt_trc20_contract_address"
+                      v-model="form.payment_usdt_trc20_contract_address"
                       type="text"
                       class="input"
                       placeholder="TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
@@ -8294,7 +8334,7 @@
                   <div>
                     <label class="input-label">TRC20 确认块数</label>
                     <input
-                      v-model.number="form.usdt_trc20_confirmations"
+                      v-model.number="form.payment_usdt_trc20_confirmations"
                       type="number"
                       min="1"
                       class="input"
@@ -8311,7 +8351,7 @@
                   <div>
                     <label class="input-label">ERC20 充值地址</label>
                     <input
-                      v-model="form.usdt_erc20_deposit_address"
+                      v-model="form.payment_usdt_erc20_deposit_address"
                       type="text"
                       class="input"
                       placeholder="0xYourERC20WalletAddress"
@@ -8320,7 +8360,7 @@
                   <div>
                     <label class="input-label">ERC20 合约地址</label>
                     <input
-                      v-model="form.usdt_erc20_contract_address"
+                      v-model="form.payment_usdt_erc20_contract_address"
                       type="text"
                       class="input"
                       placeholder="0xdac17f958d2ee523a2206206994597c13d831ec7"
@@ -8329,7 +8369,7 @@
                   <div>
                     <label class="input-label">ERC20 确认块数</label>
                     <input
-                      v-model.number="form.usdt_erc20_confirmations"
+                      v-model.number="form.payment_usdt_erc20_confirmations"
                       type="number"
                       min="1"
                       class="input"
@@ -9619,13 +9659,15 @@ type SettingsForm = Omit<
   default_platform_quotas: DefaultPlatformQuotasMap;
   account_scheduling_thresholds: ReturnType<typeof normalizeAccountSchedulingThresholdsMap>;
   // USDT 加密货币支付
-  usdt_hmac_secret: string;
-  usdt_trc20_deposit_address: string;
-  usdt_trc20_contract_address: string;
-  usdt_trc20_confirmations: number;
-  usdt_erc20_deposit_address: string;
-  usdt_erc20_contract_address: string;
-  usdt_erc20_confirmations: number;
+  payment_usdt_hmac_secret: string;
+  payment_usdt_trc20_deposit_address: string;
+  payment_usdt_trc20_contract_address: string;
+  payment_usdt_trc20_confirmations: number;
+  payment_usdt_erc20_deposit_address: string;
+  payment_usdt_erc20_contract_address: string;
+  payment_usdt_erc20_confirmations: number;
+  // GeoBlock 地理封锁：白名单 textarea 中间态（换行分隔的 IP/CIDR 文本）
+  geo_block_whitelist_text: string;
 };
 
 const schedulingThresholdPlatforms = SCHEDULING_THRESHOLD_PLATFORMS;
@@ -9677,6 +9719,10 @@ const form = reactive<SettingsForm>({
   risk_control_enabled: false,
   cyber_session_block_enabled: false,
   cyber_session_block_ttl_seconds: 3600,
+  // GeoBlock 地理封锁
+  geo_block_enabled: false,
+  geo_block_whitelist: [],
+  geo_block_whitelist_text: '',
   payment_min_amount: 1,
   payment_max_amount: 10000,
   payment_daily_limit: 50000,
@@ -9699,13 +9745,13 @@ const form = reactive<SettingsForm>({
   payment_cancel_rate_limit_window_mode: "rolling",
   payment_alipay_force_qrcode: false,
   payment_alipay_mobile_precreate_deep_link: false,
-  usdt_hmac_secret: "",
-  usdt_trc20_deposit_address: "",
-  usdt_trc20_contract_address: "",
-  usdt_trc20_confirmations: 19,
-  usdt_erc20_deposit_address: "",
-  usdt_erc20_contract_address: "",
-  usdt_erc20_confirmations: 12,
+  payment_usdt_hmac_secret: "",
+  payment_usdt_trc20_deposit_address: "",
+  payment_usdt_trc20_contract_address: "",
+  payment_usdt_trc20_confirmations: 19,
+  payment_usdt_erc20_deposit_address: "",
+  payment_usdt_erc20_contract_address: "",
+  payment_usdt_erc20_confirmations: 12,
   table_default_page_size: tablePageSizeDefault,
   table_page_size_options: [10, 20, 50, 100],
   custom_menu_items: [] as Array<{
@@ -10928,6 +10974,10 @@ async function loadSettings() {
         : defaultLoginAgreementDocuments();
     Object.assign(authSourceDefaults, buildAuthSourceDefaultsState(settings));
     form.default_platform_quotas = normalizePlatformQuotasMap(settings.default_platform_quotas);
+    // GeoBlock 白名单：将 string[] 转为 textarea 文本（换行分隔）
+    form.geo_block_whitelist_text = Array.isArray(settings.geo_block_whitelist)
+      ? settings.geo_block_whitelist.join('\n')
+      : '';
     form.account_scheduling_thresholds = normalizeAccountSchedulingThresholdsMap(
       settings.account_scheduling_thresholds,
     );
@@ -11519,6 +11569,13 @@ async function saveSettings() {
       payment_alipay_force_qrcode: form.payment_alipay_force_qrcode,
       payment_alipay_mobile_precreate_deep_link:
         form.payment_alipay_mobile_precreate_deep_link,
+      payment_usdt_hmac_secret: form.payment_usdt_hmac_secret || undefined,
+      payment_usdt_trc20_deposit_address: form.payment_usdt_trc20_deposit_address || undefined,
+      payment_usdt_trc20_contract_address: form.payment_usdt_trc20_contract_address || undefined,
+      payment_usdt_trc20_confirmations: Number(form.payment_usdt_trc20_confirmations) || undefined,
+      payment_usdt_erc20_deposit_address: form.payment_usdt_erc20_deposit_address || undefined,
+      payment_usdt_erc20_contract_address: form.payment_usdt_erc20_contract_address || undefined,
+      payment_usdt_erc20_confirmations: Number(form.payment_usdt_erc20_confirmations) || undefined,
       openai_low_upstream_rate_priority_enabled:
         form.openai_low_upstream_rate_priority_enabled,
       openai_oauth_scheduling_rate_multiplier:
@@ -11579,6 +11636,12 @@ async function saveSettings() {
       // Affiliate (邀请返利) feature switch
       affiliate_enabled: form.affiliate_enabled,
       allow_user_view_error_requests: form.allow_user_view_error_requests,
+      // GeoBlock 地理封锁
+      geo_block_enabled: form.geo_block_enabled,
+      geo_block_whitelist: form.geo_block_whitelist_text
+        .split('\n')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0),
     };
 
     // 仅当 openai_fast_policy_settings 已成功从后端加载时才回写，
